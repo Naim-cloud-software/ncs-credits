@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "target": "ncs-credits",
+    "site": "ncs-credits",
     "public": ".",
     "ignore": [
       "firebase.json",
