@@ -2229,6 +2229,14 @@ function confirmOrder() {
     closeOrderModal();
     showToast('Besteld!', `${prodTitle} succesvol geplaatst.`, 'success');
 }
+
+
+function updateTierSelection(name, price) {
+    // Past de tekst van het product aan
+    document.getElementById('modalProductName').textContent = `Website Maken (${name})`;
+    // Past het aantal credits aan dat bovenin getoond wordt
+    document.getElementById('modalProductPrice').textContent = price;
+}
         
     </script>
     
