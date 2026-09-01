@@ -1,1 +1,2149 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NCS Credits - Made by NCS</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            light: '#2dd4bf',
+                            DEFAULT: '#0d9488',
+                            dark: '#0f766e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #06b6d4 0%, #14b8a6 50%, #8b5cf6 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+        .glass-input {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(209, 213, 219, 0.5);
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+        }
+        .glass-input:focus {
+            background: rgba(255, 255, 255, 0.8);
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+        .tab-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: #7c3aed;
+            transition: width 0.3s ease;
+        }
+        .tab-btn.active::after {
+            width: 100%;
+        }
+        .tab-btn.active {
+            color: #7c3aed;
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #06b6d4 0%, #14b8a6 50%, #8b5cf6 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            filter: brightness(110%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+        
+        /* Loading Spinner */
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #7c3aed;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(167, 139, 250, 0.5);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(124, 58, 237, 0.7);
+        }
+
+        /* Animations */
+        .fade-in-up {
+            animation: fadeInUp 0.4s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 flex items-center justify-center min-h-screen items-start">
+
+    <!-- Auth Screen -->
+    <div id="authScreen" class="max-w-md w-full mx-auto glass-panel p-8 mt-10">
+        <div class="text-center mb-8">
+            <div class="inline-block p-3 rounded-full bg-indigo-100 mb-4">
+                <i class="fas fa-star text-3xl text-brand"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-1">NCS Credits</h1>
+            <p class="text-gray-500 text-sm font-medium">Made by NCS (Naim Cloud Software)</p>
+        </div>
+        
+        <!-- Login Form -->
+        <div id="loginForm" class="animate-fade-in">
+            <h3 class="text-xl font-bold mb-6 text-gray-700 border-l-4 border-brand pl-3">Inloggen</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">E-mailadres</label>
+                    <input type="email" id="loginEmail" class="glass-input w-full p-3 rounded-xl focus:outline-none text-gray-700 placeholder-gray-400">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Wachtwoord</label>
+                    <input type="password" id="loginPassword" class="glass-input w-full p-3 rounded-xl focus:outline-none text-gray-700 placeholder-gray-400">
+                </div>
+                <button onclick="appLogin()" class="btn-primary w-full text-white p-3.5 rounded-xl font-bold tracking-wide mt-2">
+                    Starten <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+                <div class="text-right mt-1">
+                    <button onclick="toggleAuth('forgot')" class="text-xs text-gray-400 hover:text-brand transition">Wachtwoord vergeten?</button>
+                </div>
+                <div class="text-center mt-4">
+                    <button onclick="toggleAuth('register')" class="text-brand font-medium text-sm hover:text-brand-dark transition">Nog geen account? Maak er een aan</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Form -->
+        <div id="registerForm" class="hidden animate-fade-in">
+            <h3 class="text-xl font-bold mb-6 text-gray-700 border-l-4 border-brand pl-3">Account aanmaken</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Naam</label>
+                    <input type="text" id="registerName" class="glass-input w-full p-3 rounded-xl focus:outline-none text-gray-700">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">E-mailadres</label>
+                    <input type="email" id="registerEmail" class="glass-input w-full p-3 rounded-xl focus:outline-none text-gray-700">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Wachtwoord</label>
+                    <input type="password" id="registerPassword" class="glass-input w-full p-3 rounded-xl focus:outline-none text-gray-700" placeholder="Minimaal 9 tekens">
+                </div>
+                <button onclick="appRegister()" class="btn-primary w-full text-white p-3.5 rounded-xl font-bold tracking-wide mt-2">
+                    Registreren
+                </button>
+                <div class="text-center mt-4">
+                    <button onclick="toggleAuth('login')" class="text-brand font-medium text-sm hover:text-brand-dark transition">Al een account? Inloggen</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Forgot Password Form -->
+        <div id="forgotForm" class="hidden animate-fade-in">
+            <h3 class="text-xl font-bold mb-6 text-gray-700 border-l-4 border-brand pl-3">Wachtwoord Herstel</h3>
+            <div class="space-y-4">
+                <div id="forgotStep1">
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">E-mailadres</label>
+                    <input type="email" id="forgotEmail" class="glass-input w-full p-3 rounded-xl focus:outline-none text-gray-700">
+                    <button onclick="checkResetStatus()" class="btn-primary w-full text-white p-3.5 rounded-xl font-bold tracking-wide mt-4">
+                        Controleer Status / Aanvragen
+                    </button>
+                </div>
+                
+                <div id="forgotStep2" class="hidden">
+                    <div class="bg-green-50 text-green-700 p-3 rounded-xl text-sm font-bold mb-4">
+                        <i class="fas fa-check-circle mr-2"></i> Aanvraag goedgekeurd!
+                    </div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Nieuw Wachtwoord</label>
+                    <input type="password" id="newPassword" class="glass-input w-full p-3 rounded-xl focus:outline-none text-gray-700" placeholder="Minimaal 9 tekens">
+                    <button onclick="finalizeReset()" class="btn-primary w-full text-white p-3.5 rounded-xl font-bold tracking-wide mt-4">
+                        Wachtwoord Wijzigen
+                    </button>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button onclick="toggleAuth('login')" class="text-brand font-medium text-sm hover:text-brand-dark transition">Terug naar Inloggen</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="authMessage" class="mt-4 text-center text-sm font-medium h-6"></div>
+        <div id="loadingIndicator" class="hidden mt-4 text-center"><div class="loader"></div></div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="container mx-auto max-w-6xl hidden w-full">
+        <!-- Header -->
+        <div class="glass-panel p-6 mb-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-brand-light flex items-center justify-center text-white text-xl font-bold shadow-lg">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-gray-800 tracking-tight">NCS Credits</div>
+                    <div class="text-sm text-gray-500 font-medium">Ingelogd als: <span id="userNameDisplay" class="text-brand font-bold"></span></div>
+                </div>
+            </div>
+            <div class="flex items-center gap-4 bg-white/50 p-2 rounded-2xl">
+                <div class="bg-gradient-to-r from-brand to-brand-dark text-white px-6 py-2.5 rounded-xl font-bold shadow-md flex items-center gap-2">
+                    <i class="fas fa-gem text-yellow-300"></i> <span id="userCreditsDisplay" class="text-lg">0</span> Credits
+                </div>
+                <button onclick="appLogout()" class="text-gray-500 hover:text-red-500 p-3 rounded-xl hover:bg-red-50 transition duration-300">
+                    <i class="fas fa-power-off text-lg"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="flex flex-wrap gap-4 mb-8 justify-center md:justify-start">
+            <button class="tab-btn active flex-1 md:flex-none md:w-40 bg-white/80 py-3 px-4 rounded-xl shadow-sm text-gray-600 font-bold hover:bg-white transition" onclick="showTab('shop')">
+                <i class="fas fa-store mr-2"></i> Shop
+            </button>
+            <button class="tab-btn flex-1 md:flex-none md:w-40 bg-white/80 py-3 px-4 rounded-xl shadow-sm text-gray-600 font-bold hover:bg-white transition" onclick="showTab('orders')">
+                <i class="fas fa-box mr-2"></i> Orders
+            </button>
+            <button class="tab-btn flex-1 md:flex-none md:w-40 bg-white/80 py-3 px-4 rounded-xl shadow-sm text-gray-600 font-bold hover:bg-white transition" onclick="showTab('mailbox')">
+                <i class="fas fa-envelope mr-2"></i> Mailbox
+            </button>
+            <button class="tab-btn flex-1 md:flex-none md:w-40 bg-white/80 py-3 px-4 rounded-xl shadow-sm text-gray-600 font-bold hover:bg-white transition" onclick="showTab('gift')">
+                <i class="fas fa-gift mr-2"></i> Cadeau
+            </button>
+            <button class="tab-btn flex-1 md:flex-none md:w-40 bg-white/80 py-3 px-4 rounded-xl shadow-sm text-gray-600 font-bold hover:bg-white transition" onclick="showTab('credits')">
+                <i class="fas fa-coins mr-2"></i> Credits
+            </button>
+            <button id="adminTabBtn" class="tab-btn hidden flex-1 md:flex-none md:w-40 bg-yellow-100 py-3 px-4 rounded-xl shadow-sm text-yellow-700 font-bold hover:bg-yellow-200 transition" onclick="showTab('admin')">
+                <i class="fas fa-crown mr-2"></i> Admin
+            </button>
+        </div>
+
+        <!-- Shop Tab -->
+        <div id="shopTab" class="tab-content">
+            <div class="flex justify-between items-center mb-6">
+                 <h2 class="text-2xl font-bold text-white drop-shadow-md">Diensten Catalogus</h2>
+            </div>
+           
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Product 1 -->
+                <div class="product-card glass-panel p-6 flex flex-col relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-brand-light text-white text-xs font-bold px-3 py-1 rounded-bl-xl">Populair</div>
+                    <div class="w-16 h-16 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition duration-300">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Website Maken</h3>
+                    <p class="text-gray-500 text-sm flex-grow mb-4 leading-relaxed">Een professionele, responsieve website op maat gemaakt voor jouw project.</p>
+                    <div class="mt-auto">
+                        <div class="text-2xl font-bold text-brand mb-3">1 Credit</div>
+                        <button onclick="initiateOrder('website', 1)" class="w-full btn-primary text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform active:scale-95 transition">
+                            Nu Bestellen
+                        </button>
+                    </div>
+                </div>
+                <!-- Product 2 -->
+                <div class="product-card glass-panel p-6 flex flex-col group">
+                    <div class="w-16 h-16 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition duration-300">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Game Maken</h3>
+                    <p class="text-gray-500 text-sm flex-grow mb-4 leading-relaxed">Wij ontwikkelen een unieke game ervaring gebaseerd op jouw ideeën.</p>
+                    <div class="mt-auto">
+                        <div class="text-2xl font-bold text-brand mb-3">2 Credits</div>
+                        <button onclick="initiateOrder('game', 2)" class="w-full btn-primary text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform active:scale-95 transition">
+                            Nu Bestellen
+                        </button>
+                    </div>
+                </div>
+                <!-- Product 3 -->
+                <div class="product-card glass-panel p-6 flex flex-col group">
+                    <div class="w-16 h-16 rounded-2xl bg-pink-100 text-pink-600 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition duration-300">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">App Maken</h3>
+                    <p class="text-gray-500 text-sm flex-grow mb-4 leading-relaxed">Een volledig werkende mobiele applicatie voor iOS en Android.</p>
+                    <div class="mt-auto">
+                        <div class="text-2xl font-bold text-brand mb-3">3 Credits</div>
+                        <button onclick="initiateOrder('app', 3)" class="w-full btn-primary text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform active:scale-95 transition">
+                            Nu Bestellen
+                        </button>
+                    </div>
+                </div>
+                <!-- Product 4 -->
+                <div class="product-card glass-panel p-6 flex flex-col group">
+                    <div class="w-16 h-16 rounded-2xl bg-green-100 text-green-600 flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition duration-300">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Logo Ontwerp</h3>
+                    <p class="text-gray-500 text-sm flex-grow mb-4 leading-relaxed">Een strak en herkenbaar logo ontwerp voor jouw merk identiteit.</p>
+                    <div class="mt-auto">
+                        <div class="text-2xl font-bold text-brand mb-3">1 Credit</div>
+                        <button onclick="initiateOrder('logo', 1)" class="w-full btn-primary text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transform active:scale-95 transition">
+                            Nu Bestellen
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Modal -->
+        <div id="orderModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform transition-all scale-100">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-800">Bevestig Bestelling</h3>
+                    <button onclick="closeOrderModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="bg-indigo-50 p-4 rounded-xl mb-6 border border-indigo-100">
+                    <div class="text-sm text-gray-500 uppercase font-bold mb-1">Product</div>
+                    <div class="text-lg font-bold text-brand mb-2" id="modalProductName"></div>
+                    <div class="flex justify-between items-center border-t border-indigo-200 pt-2 mt-2">
+                        <span class="text-gray-600 font-medium">Kosten:</span>
+                        <span class="text-xl font-bold text-gray-800"><span id="modalProductPrice"></span> Credits</span>
+                    </div>
+                </div>
+
+                <!-- Game Options (Hidden by default) -->
+                <div id="gameOptions" class="hidden mb-6 bg-purple-50 p-4 rounded-xl border border-purple-100">
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Type Game</label>
+                    <div class="flex gap-2">
+                        <label class="flex-1 cursor-pointer"><input type="radio" name="gameType" value="web" checked class="hidden peer" onchange="toggleGameType()">
+                            <div class="text-center py-2 rounded-lg border border-purple-200 bg-white peer-checked:bg-brand peer-checked:text-white transition text-sm font-bold">Web Game</div>
+                        </label>
+                        <label class="flex-1 cursor-pointer"><input type="radio" name="gameType" value="app" class="hidden peer" onchange="toggleGameType()">
+                            <div class="text-center py-2 rounded-lg border border-purple-200 bg-white peer-checked:bg-brand peer-checked:text-white transition text-sm font-bold">App</div>
+                        </label>
+                    </div>
+                    <div id="appWarning" class="hidden mt-2 text-xs text-orange-600 font-bold text-center bg-orange-50 p-2 rounded"><i class="fas fa-clock mr-1"></i> Binnenkort beschikbaar!</div>
+                </div>
+                
+                <div class="space-y-4 mb-6">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Naam Project</label>
+                        <input type="text" id="orderProjectName" placeholder="Mijn Geweldige Project" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Beschrijving</label>
+                        <textarea id="orderDescription" rows="3" placeholder="Vertel ons wat je precies wilt..." class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition"></textarea>
+                    </div>
+                </div>
+                
+                <div class="flex gap-3">
+                    <button onclick="closeOrderModal()" class="flex-1 bg-gray-100 text-gray-600 py-3 rounded-xl font-bold hover:bg-gray-200 transition">Annuleren</button>
+                    <button onclick="confirmOrder()" class="flex-1 btn-primary text-white py-3 rounded-xl font-bold shadow-lg">Bevestigen</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Complaint Modal -->
+        <div id="complaintModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform transition-all scale-100">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-800">Klacht of Vraag</h3>
+                    <button onclick="closeComplaintModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <p class="text-sm text-gray-500">Heb je een probleem of een vraag? Stuur het direct naar de admin.</p>
+                    <textarea id="complaintText" rows="5" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-brand" placeholder="Beschrijf je klacht of vraag..."></textarea>
+                    <button onclick="submitComplaint()" class="w-full bg-red-500 text-white py-3 rounded-xl font-bold hover:bg-red-600 transition shadow-lg">
+                        <i class="fas fa-paper-plane mr-2"></i> Versturen
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Special Admin Modal -->
+        <div id="specialAdminModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform transition-all scale-100">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-800"><i class="fas fa-shield-alt text-brand mr-2"></i>Speciale Admin</h3>
+                    <button onclick="closeSpecialAdminModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="mb-6 text-center">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3 text-2xl font-bold text-gray-500" id="saUserIcon"></div>
+                    <h4 id="saUserName" class="text-xl font-bold text-gray-800"></h4>
+                    <p id="saUserEmail" class="text-sm text-gray-500"></p>
+                </div>
+                
+                <div class="space-y-3">
+                    <button id="saBlockBtn" onclick="saToggleBlock()" class="w-full py-3 rounded-xl font-bold transition shadow-sm border flex items-center justify-center gap-2"></button>
+                    <button id="saLockBtn" onclick="saToggleLock()" class="w-full py-3 rounded-xl font-bold transition shadow-sm border flex items-center justify-center gap-2"></button>
+                    <button onclick="saWarnUser()" class="w-full bg-yellow-50 text-yellow-600 border border-yellow-100 hover:bg-yellow-100 py-3 rounded-xl font-bold transition shadow-sm flex items-center justify-center gap-2">
+                        <i class="fas fa-exclamation-triangle"></i> Waarschuwen
+                    </button>
+                    <button onclick="saDeleteUser()" class="w-full bg-red-50 text-red-600 border border-red-100 hover:bg-red-100 py-3 rounded-xl font-bold transition shadow-sm flex items-center justify-center gap-2">
+                        <i class="fas fa-trash"></i> Verwijderen
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Order Modal -->
+        <div id="viewOrderModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform transition-all scale-100">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-800">Bestelling Details</h3>
+                    <button onclick="closeViewOrderModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="text-xs font-bold text-gray-500 uppercase">Project</div>
+                                <div class="font-bold text-gray-800 text-lg" id="viewOrderProjectName"></div>
+                            </div>
+                            <span id="viewOrderStatus" class="px-2 py-1 rounded text-xs font-bold uppercase"></span>
+                        </div>
+                        <div class="mt-2 text-sm text-gray-600">
+                            <span class="font-bold">Type:</span> <span id="viewOrderProductName"></span>
+                        </div>
+                        <div class="mt-1 text-xs text-gray-400" id="viewOrderDate"></div>
+                    </div>
+
+                    <div>
+                        <div class="text-xs font-bold text-gray-500 uppercase mb-1">Beschrijving</div>
+                        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 text-gray-700 text-sm leading-relaxed max-h-40 overflow-y-auto" id="viewOrderDescription"></div>
+                    </div>
+                </div>
+                
+                <button onclick="closeViewOrderModal()" class="mt-6 w-full bg-gray-100 text-gray-600 py-3 rounded-xl font-bold hover:bg-gray-200 transition">
+                    Sluiten
+                </button>
+            </div>
+        </div>
+
+        <!-- Message Detail Modal -->
+        <div id="messageModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+            <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform transition-all scale-100">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-800">Bericht Details</h3>
+                    <button onclick="closeMessageModal()" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <div class="bg-indigo-50 p-4 rounded-xl mb-6 border border-indigo-100">
+                    <div class="flex justify-between items-center mb-3">
+                        <div class="text-sm text-gray-500 uppercase font-bold">Bericht</div>
+                        <div class="text-xs text-brand font-bold" id="modalSenderInfo"></div>
+                    </div>
+                    <p id="modalMessageContent" class="text-gray-700 leading-relaxed break-words"></p>
+                    <div class="text-xs text-gray-400 mt-3 pt-3 border-t border-indigo-200">
+                        <span id="modalMessageDate"></span>
+                    </div>
+                </div>
+
+                <div id="replySection" class="hidden mb-4">
+                    <textarea id="replyText" rows="3" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-brand text-sm" placeholder="Schrijf je reactie..."></textarea>
+                    <button onclick="sendReply()" class="mt-2 w-full bg-brand text-white py-2 rounded-xl font-bold text-sm hover:bg-brand-dark transition">Verstuur Reactie</button>
+                </div>
+
+                <div class="flex gap-3">
+                    <button onclick="deleteCurrentMessage()" class="flex-1 bg-red-50 text-red-500 py-3 rounded-xl font-bold hover:bg-red-100 transition">
+                        <i class="fas fa-trash mr-2"></i> Verwijderen
+                    </button>
+                    <button id="replyBtn" onclick="toggleReply()" class="flex-1 bg-indigo-50 text-indigo-600 py-3 rounded-xl font-bold hover:bg-indigo-100 transition">
+                        <i class="fas fa-reply mr-2"></i> Reageren
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Tab -->
+        <div id="ordersTab" class="glass-panel p-8 tab-content hidden min-h-[500px]">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-3">
+                <i class="fas fa-box-open text-brand"></i> Mijn Bestellingen
+            </h2>
+            <div id="ordersList" class="space-y-4"></div>
+        </div>
+
+        <!-- Mailbox Tab -->
+        <div id="mailboxTab" class="glass-panel p-8 tab-content hidden min-h-[500px]">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 flex items-center gap-3">
+                    <i class="fas fa-inbox text-brand"></i> Mailbox
+                </h2>
+                <button onclick="openComplaintModal()" class="bg-red-50 text-red-600 px-4 py-2 rounded-xl font-bold text-sm hover:bg-red-100 transition border border-red-100">
+                    <i class="fas fa-exclamation-circle mr-2"></i> Klacht Melden
+                </button>
+            </div>
+            <div id="mailboxList" class="space-y-4"></div>
+        </div>
+
+        <!-- Gift Tab -->
+        <div id="giftTab" class="glass-panel p-8 tab-content hidden min-h-[500px]">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-3">
+                <i class="fas fa-gift text-brand"></i> Credits Geven
+            </h2>
+            <div class="max-w-xl mx-auto bg-white/60 p-8 rounded-3xl shadow-sm border border-white/50">
+                <div class="text-center mb-8">
+                    <div class="w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-heart text-4xl text-pink-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800">Maak iemand blij!</h3>
+                    <p class="text-gray-500">Stuur credits naar een vriend of collega.</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">E-mailadres Ontvanger</label>
+                        <div class="relative">
+                            <i class="fas fa-at absolute left-4 top-4 text-gray-400"></i>
+                            <input type="email" id="giftEmail" placeholder="vriend@voorbeeld.nl" class="w-full p-3 pl-10 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-brand transition">
+                        </div>
+                    </div>
+                    <div>
+                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Aantal Credits</label>
+                        <div class="relative">
+                            <i class="fas fa-gem absolute left-4 top-4 text-gray-400"></i>
+                            <input type="number" id="giftAmount" placeholder="1" min="1" class="w-full p-3 pl-10 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-brand transition">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Persoonlijk Bericht</label>
+                        <textarea id="giftMsg" placeholder="Veel plezier ermee!" rows="2" class="w-full p-3 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-brand transition"></textarea>
+                    </div>
+                    <button onclick="processGift()" class="w-full btn-primary text-white py-3.5 rounded-xl font-bold shadow-lg mt-4">
+                        <i class="fas fa-paper-plane mr-2"></i> Versturen
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Credits Tab (Buy & Earn) -->
+        <div id="creditsTab" class="glass-panel p-8 tab-content hidden min-h-[500px]">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800 flex items-center gap-3">
+                <i class="fas fa-coins text-brand"></i> Credits Beheer
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Buy Credits -->
+                <div class="bg-white/60 p-6 rounded-3xl border border-white/50">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="fas fa-shopping-cart text-brand"></i> Kopen</h3>
+                    <p class="text-sm text-gray-500 mb-6">Koop credits en betaal contant op locatie.</p>
+                    
+                    <div class="space-y-3">
+                        <div onclick="buyCredits(5, 1)" class="bg-white p-4 rounded-xl border border-gray-200 cursor-pointer hover:border-brand hover:shadow-md transition flex justify-between items-center group">
+                            <div class="font-bold text-gray-700">5 Credits</div>
+                            <div class="bg-green-100 text-green-700 px-3 py-1 rounded-lg font-bold group-hover:bg-green-200">€ 1,00</div>
+                        </div>
+                        <div onclick="buyCredits(10, 2)" class="bg-white p-4 rounded-xl border border-gray-200 cursor-pointer hover:border-brand hover:shadow-md transition flex justify-between items-center group">
+                            <div class="font-bold text-gray-700">10 Credits</div>
+                            <div class="bg-green-100 text-green-700 px-3 py-1 rounded-lg font-bold group-hover:bg-green-200">€ 2,00</div>
+                        </div>
+                        <div onclick="buyCredits(25, 5)" class="bg-white p-4 rounded-xl border border-gray-200 cursor-pointer hover:border-brand hover:shadow-md transition flex justify-between items-center group">
+                            <div class="font-bold text-gray-700">25 Credits</div>
+                            <div class="bg-green-100 text-green-700 px-3 py-1 rounded-lg font-bold group-hover:bg-green-200">€ 5,00</div>
+                        </div>
+                        <div onclick="buyCredits(50, 10)" class="bg-white p-4 rounded-xl border border-gray-200 cursor-pointer hover:border-brand hover:shadow-md transition flex justify-between items-center group">
+                            <div class="font-bold text-gray-700">50 Credits</div>
+                            <div class="bg-green-100 text-green-700 px-3 py-1 rounded-lg font-bold group-hover:bg-green-200">€ 10,00</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earn Credits (Mini Game- wekelekse bonus - draai rad) -->
+                <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-6 rounded-3xl text-white relative overflow-hidden"> 
+    <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-10 -mt-10"></div> 
+    <h3 class="text-xl font-bold mb-2 flex items-center gap-2"><i class="fas fa-dice text-yellow-300"></i> Wekelijkse Bonus</h3> 
+    <p class="text-indigo-100 text-sm mb-8">Draai aan het wiel en win gratis credits! (1x per week)</p> 
+    
+    <div class="text-center py-8"> 
+        <div id="slotMachine" class="text-6xl font-bold mb-6 h-20 flex items-center justify-center gap-2"> 
+            <span>🎰</span><span>🎰</span><span>🎰</span> 
+        </div> 
+        
+        <!-- Knop staat nu permanent uit en reageert nergens op -->
+        <button id="spinBtn" disabled class="bg-yellow-400 text-yellow-900 px-8 py-3 rounded-xl font-bold shadow-lg opacity-50 cursor-not-allowed w-full"> 
+            DRAAIEN! 
+        </button> 
+        
+        <!-- De tekst staat hier nu direct hardcoded in -->
+        <p id="spinResult" class="mt-4 font-bold text-lg h-6 text-red-300">Rad uitgezet door beheerder</p> 
+        <p id="nextSpinTime" class="mt-2 text-xs text-indigo-200"></p> 
+    </div> 
+</div>
+
+            <!-- Payment Location Info -->
+            <div class="mt-8 bg-yellow-50 border border-yellow-100 p-4 rounded-xl flex items-start gap-3">
+                <i class="fas fa-info-circle text-yellow-600 mt-1"></i>
+                <p class="text-sm text-yellow-800"><strong>Betalingen:</strong> Voor contante betalingen, ga naar de balie of de door de admin aangewezen locatie. Je credits worden toegevoegd zodra de betaling is ontvangen.</p>
+            </div>
+            
+            <h3 class="text-xl font-bold mt-8 mb-4 text-gray-800 flex items-center gap-2"><i class="fas fa-history text-brand"></i> Mijn Aanvragen</h3>
+            <div id="creditRequestsList" class="space-y-4">
+            </div>
+        </div>
+
+        <!-- Admin Tab -->
+        <div id="adminTab" class="glass-panel p-8 tab-content hidden">
+            <h2 class="text-2xl font-bold mb-8 text-gray-800 border-b border-gray-200 pb-4 flex items-center justify-between">
+                <span><i class="fas fa-tools text-brand mr-2"></i> Admin Dashboard</span>
+                <span class="text-xs bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">Alleen voor beheerders</span>
+            </h2>
+            
+            <!-- Admin Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                    <div><div class="text-gray-400 text-xs font-bold uppercase">Gebruikers</div><div class="text-2xl font-bold text-gray-800" id="statUsers">-</div></div>
+                    <div class="w-10 h-10 rounded-full bg-indigo-100 text-brand flex items-center justify-center"><i class="fas fa-users"></i></div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                    <div><div class="text-gray-400 text-xs font-bold uppercase">Open Orders</div><div class="text-2xl font-bold text-brand" id="statOrders">-</div></div>
+                    <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center"><i class="fas fa-box-open"></i></div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                    <div><div class="text-gray-400 text-xs font-bold uppercase">Reset Aanvragen</div><div class="text-2xl font-bold text-red-500" id="statResets">-</div></div>
+                    <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center"><i class="fas fa-key"></i></div>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                    <div><div class="text-gray-400 text-xs font-bold uppercase">Totaal Credits</div><div class="text-2xl font-bold text-yellow-500" id="statCredits">-</div></div>
+                    <div class="w-10 h-10 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center"><i class="fas fa-coins"></i></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Users Management -->
+                <div class="bg-white/50 rounded-2xl p-6 border border-white/60 shadow-sm">
+                    <h3 class="text-lg font-bold mb-4 text-brand flex items-center gap-2">
+                        <i class="fas fa-users"></i> Gebruikers Beheren
+                    </h3>
+                    <input type="text" id="adminUserSearch" placeholder="Zoek op naam of email..." class="w-full mb-3 p-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-brand" oninput="filterAdminUsers()">
+                    <div id="adminUsersList" class="space-y-3 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
+                        <!-- Users loaded here -->
+                        <div class="text-center py-8 text-gray-400"><div class="loader"></div></div>
+                    </div>
+                </div>
+
+                <!-- Admin Actions -->
+                <div class="space-y-6">
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                        <h3 class="text-lg font-bold mb-4 text-brand flex items-center gap-2">
+                            <i class="fas fa-paper-plane"></i> Bericht Sturen
+                        </h3>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Selecteer Gebruiker</label>
+                                <div class="relative">
+                                    <select id="adminMsgSelect" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-brand appearance-none cursor-pointer">
+                                        <option value="">Laden...</option>
+                                    </select>
+                                    <div class="absolute right-4 top-4 text-gray-400 pointer-events-none">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Bericht</label>
+                                <textarea id="adminMsgText" placeholder="Typ hier je bericht..." rows="3" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-brand"></textarea>
+                            </div>
+                            <button onclick="adminSendMessage()" class="w-full bg-brand text-white py-2.5 rounded-xl font-bold hover:bg-brand-dark transition shadow-md">
+                                Versturen
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Admin Complaints View -->
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                        <h3 class="text-lg font-bold mb-4 text-red-600 flex items-center gap-2">
+                            <i class="fas fa-exclamation-circle"></i> Ingekomen Klachten
+                        </h3>
+                        <div id="adminComplaintsList" class="h-48 overflow-y-auto space-y-3 pr-2 custom-scrollbar">
+                            <div class="text-center text-gray-400 text-sm mt-10">Laden...</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                        <h3 class="text-lg font-bold mb-4 text-blue-600 flex items-center gap-2">
+                            <i class="fas fa-envelope-open-text"></i> Overige Berichten
+                        </h3>
+                        <div id="adminOtherMessagesList" class="h-48 overflow-y-auto space-y-3 pr-2 custom-scrollbar">
+                            <div class="text-center text-gray-400 text-sm mt-10">Laden...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-lg font-bold mt-8 mb-4 text-brand flex items-center gap-2">
+                <i class="fas fa-list-alt"></i> Alle Bestellingen
+            </h3>
+            <div class="flex flex-col sm:flex-row gap-2 mb-4">
+                <input type="text" id="adminOrderSearch" placeholder="Zoek op project, klant of type..." class="flex-1 p-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-brand" oninput="filterAdminOrders()">
+                <select id="adminOrderFilter" class="p-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-brand" onchange="filterAdminOrders()">
+                    <option value="all">Alles</option>
+                    <option value="active" selected>Actief</option>
+                    <option value="completed">Voltooid/Afgehandeld</option>
+                </select>
+            </div>
+            <div id="adminOrdersList" class="space-y-4">
+                <!-- All orders loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Warning Overlay -->
+    <div id="warningOverlay" class="fixed inset-0 bg-red-600/90 z-[60] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-lg w-full text-center shadow-2xl transform scale-100 transition-transform">
+            <div class="text-6xl mb-4">⚠️</div>
+            <h2 class="text-3xl font-extrabold text-red-600 mb-4">WAARSCHUWING</h2>
+            <p id="warningContent" class="text-xl text-gray-800 font-bold mb-8"></p>
+            <button onclick="dismissWarning()" class="w-full bg-red-600 text-white py-4 rounded-xl font-bold text-xl hover:bg-red-700 transition shadow-lg">
+                IK BEGRIJP HET
+            </button>
+        </div>
+    </div>
+
+    <!-- Locked Overlay -->
+    <div id="lockedOverlay" class="fixed inset-0 bg-gray-900/95 z-[70] hidden flex items-center justify-center p-4 text-white text-center">
+        <div>
+            <div class="text-6xl mb-6 text-blue-400"><i class="fas fa-lock"></i></div>
+            <h1 class="text-4xl font-bold mb-4">Account Vergrendeld</h1>
+            <p class="text-xl text-gray-300">Je account is tijdelijk vergrendeld door een beheerder.<br>Je kunt momenteel geen acties uitvoeren.</p>
+        </div>
+    </div>
+
+    <!-- Blocked Overlay -->
+    <div id="blockedOverlay" class="fixed inset-0 bg-black z-[80] hidden flex items-center justify-center p-4 text-red-600 text-center">
+        <div>
+            <div class="text-8xl mb-6"><i class="fas fa-ban"></i></div>
+            <h1 class="text-5xl font-extrabold mb-6">GEBLOKKEERD</h1>
+            <p class="text-2xl text-gray-400">Toegang tot dit account is permanent ontzegd.</p>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed top-5 right-5 hidden transform transition-all duration-300 z-50">
+        <div class="bg-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 border-l-4 border-brand min-w-[300px]">
+            <div id="toastIcon" class="text-xl"></div>
+            <div>
+                <div id="toastTitle" class="font-bold text-gray-800 text-sm"></div>
+                <div id="toastMsg" class="text-gray-500 text-xs"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, updateDoc, addDoc, deleteDoc, onSnapshot, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- Configuration & Setup ---
+        
+        // JOUW EIGEN CONFIGURATIE (voor hosting)
+        const myFirebaseConfig = {
+            apiKey: "AIzaSyDMm016yi4A4-JKfRa7kCx6MaKyW45sr70",
+            authDomain: "ncs-cast.firebaseapp.com",
+            projectId: "ncs-cast",
+            storageBucket: "ncs-cast.firebasestorage.app",
+            messagingSenderId: "357074475524",
+            appId: "1:357074475524:web:6b3f6ff0ff39741612b351"
+        };
+
+        let firebaseConfig, dbPrefix;
+
+        // Detecteer omgeving: Canvas vs Hosting
+        if (typeof __firebase_config !== 'undefined') {
+            // We zitten in de Canvas preview (hier in de chat)
+            firebaseConfig = JSON.parse(__firebase_config);
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app';
+            // Canvas vereist specifieke paden met artifacts/...
+            dbPrefix = `artifacts/${appId}/public/data/`;
+        } else {
+            // We zitten op jouw eigen hosting (geen system vars)
+            firebaseConfig = myFirebaseConfig;
+            // Op eigen hosting gebruiken we normale root collecties
+            dbPrefix = ''; 
+        }
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Define paths
+        // We gebruiken dbPrefix om te schakelen tussen "artifacts/..." (Canvas) en "users" (Hosting)
+        const USERS_COLLECTION = collection(db, `${dbPrefix}users`);
+        const ORDERS_COLLECTION = collection(db, `${dbPrefix}orders`);
+        const MESSAGES_COLLECTION = collection(db, `${dbPrefix}messages`);
+
+        // State
+        let currentUser = null;
+        let activeProduct = null;
+        let activePrice = 0;
+        let loadedMessages = [];
+        let ordersUnsubscribe = null;
+        let messagesUnsubscribe = null;
+        let currentMessageId = null;
+        let currentReplyEmail = null;
+        let loadedOrders = [];
+        let adminUsersData = [];
+        let adminOrdersData = [];
+        let adminUsersUnsubscribe = null;
+        let adminOrdersUnsubscribe = null;
+        let adminMessagesUnsubscribe = null;
+        let currentUserUnsubscribe = null;
+        let selectedAdminUser = null;
+
+        // --- Initialization ---
+        const init = async () => {
+            try {
+                // Auth logica verschilt per omgeving
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    // Canvas auth
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    // Hosting auth: Anoniem inloggen om DB toegang te krijgen 
+                    // (tenzij je DB regels public read toestaan)
+                    if (!auth.currentUser) {
+                         await signInAnonymously(auth);
+                    }
+                }
+                
+                const savedUser = localStorage.getItem('ncs_user');
+                if (savedUser) {
+                    const parsed = JSON.parse(savedUser);
+                    await refreshUserData(parsed.email);
+                }
+            } catch (e) {
+                console.error("Init failed", e);
+                // Toon geen error toast meteen, want anon auth kan falen als regels streng zijn
+            }
+        };
+
+        // --- Auth Logic ---
+        window.toggleAuth = (mode) => {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const forgotForm = document.getElementById('forgotForm');
+            
+            loginForm.classList.add('hidden');
+            registerForm.classList.add('hidden');
+            forgotForm.classList.add('hidden');
+            
+            if (mode === 'login') loginForm.classList.remove('hidden');
+            else if (mode === 'register') registerForm.classList.remove('hidden');
+            else if (mode === 'forgot') {
+                forgotForm.classList.remove('hidden');
+                document.getElementById('forgotStep1').classList.remove('hidden');
+                document.getElementById('forgotStep2').classList.add('hidden');
+                document.getElementById('forgotEmail').value = '';
+                document.getElementById('newPassword').value = '';
+            }
+            document.getElementById('authMessage').innerHTML = '';
+        };
+
+        window.appRegister = async () => {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value.toLowerCase();
+            const password = document.getElementById('registerPassword').value;
+
+            if (!name || !email || !password) return showAuthMsg("Vul alle velden in.", "error");
+            if (password.length < 9) return showAuthMsg("Wachtwoord moet minimaal 9 tekens bevatten.", "error");
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) return showAuthMsg("Voer een geldig e-mailadres in.", "error");
+
+            toggleLoading(true);
+            try {
+                if (!auth.currentUser) await init();
+
+                const q = query(USERS_COLLECTION, where('email', '==', email));
+                const snap = await getDocs(q);
+
+                if (!snap.empty) throw new Error("E-mailadres is al in gebruik.");
+
+                const newUser = {
+                    name,
+                    email,
+                    password,
+                    credits: 0,
+                    createdAt: new Date().toISOString(),
+                    role: email === 'cankayanaim66@gmail.com' ? 'admin' : 'user'
+                };
+
+                await addDoc(USERS_COLLECTION, newUser);
+                showAuthMsg("Account aangemaakt! Log nu in.", "success");
+                toggleAuth('login');
+                document.getElementById('loginEmail').value = email;
+            } catch (e) {
+                showAuthMsg(e.message, "error");
+            } finally {
+                toggleLoading(false);
+            }
+        };
+
+        window.appLogin = async () => {
+            const email = document.getElementById('loginEmail').value.toLowerCase();
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) return showAuthMsg("Vul alle velden in.", "error");
+
+            toggleLoading(true);
+            try {
+                if (!auth.currentUser) await init();
+
+                const q = query(USERS_COLLECTION, where('email', '==', email));
+                const snap = await getDocs(q);
+
+                if (snap.empty) throw new Error("Gebruiker niet gevonden.");
+
+                let userDocId = null;
+                let userData = null;
+
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    if (data.password === password) {
+                        if (data.deleted) return; // Skip verwijderde gebruikers
+                        if (data.isBlocked) throw new Error("Je account is geblokkeerd. Neem contact op met de admin.");
+                        
+                        userData = data;
+                        userDocId = doc.id;
+                    }
+                });
+
+                if (!userData) throw new Error("Onjuist wachtwoord.");
+
+                userData.id = userDocId;
+                handleLoginSuccess(userData);
+
+            } catch (e) {
+                showAuthMsg(e.message, "error");
+            } finally {
+                toggleLoading(false);
+            }
+        };
+
+        window.checkResetStatus = async () => {
+            const email = document.getElementById('forgotEmail').value.toLowerCase();
+            if(!email) return showAuthMsg("Vul je e-mailadres in.", "error");
+            
+            toggleLoading(true);
+            try {
+                const q = query(USERS_COLLECTION, where('email', '==', email));
+                const snap = await getDocs(q);
+                
+                if(snap.empty) throw new Error("E-mailadres niet gevonden.");
+                
+                const userDoc = snap.docs[0];
+                const userData = userDoc.data();
+                
+                if (userData.passwordResetStatus === 'approved') {
+                    document.getElementById('forgotStep1').classList.add('hidden');
+                    document.getElementById('forgotStep2').classList.remove('hidden');
+                    showAuthMsg("", "success");
+                } else if (userData.passwordResetStatus === 'requested') {
+                    showAuthMsg("Aanvraag is in behandeling. Wacht op de admin.", "error");
+                } else {
+                    await updateDoc(doc(USERS_COLLECTION, userDoc.id), { passwordResetStatus: 'requested' });
+                    showAuthMsg("Aanvraag verstuurd! Wacht tot de admin dit goedkeurt.", "success");
+                }
+            } catch(e) { showAuthMsg(e.message, "error"); } 
+            finally { toggleLoading(false); }
+        };
+
+        window.finalizeReset = async () => {
+            const email = document.getElementById('forgotEmail').value.toLowerCase();
+            const newPass = document.getElementById('newPassword').value;
+            if(newPass.length < 9) return showAuthMsg("Wachtwoord moet minimaal 9 tekens zijn.", "error");
+            
+            toggleLoading(true);
+            try {
+                const q = query(USERS_COLLECTION, where('email', '==', email));
+                const snap = await getDocs(q);
+                if(snap.empty) throw new Error("Fout bij ophalen gebruiker.");
+                
+                await updateDoc(doc(USERS_COLLECTION, snap.docs[0].id), { password: newPass, passwordResetStatus: null });
+                showAuthMsg("Wachtwoord gewijzigd! Je kunt nu inloggen.", "success");
+                setTimeout(() => toggleAuth('login'), 2000);
+            } catch(e) { showAuthMsg("Er ging iets mis.", "error"); } 
+            finally { toggleLoading(false); }
+        };
+
+        window.appLogout = () => {
+            currentUser = null;
+            localStorage.removeItem('ncs_user');
+            if (ordersUnsubscribe) ordersUnsubscribe();
+            if (messagesUnsubscribe) messagesUnsubscribe();
+            ordersUnsubscribe = null;
+            messagesUnsubscribe = null;
+            if (adminUsersUnsubscribe) adminUsersUnsubscribe();
+            if (adminOrdersUnsubscribe) adminOrdersUnsubscribe();
+            if (adminMessagesUnsubscribe) adminMessagesUnsubscribe();
+            if (currentUserUnsubscribe) currentUserUnsubscribe();
+            adminUsersUnsubscribe = null;
+            adminOrdersUnsubscribe = null;
+            adminMessagesUnsubscribe = null;
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('authScreen').classList.remove('hidden');
+            document.getElementById('loginPassword').value = '';
+            showToast("Uitgelogd", "Tot ziens!", "success");
+        };
+
+        const checkUserStatus = (user) => {
+            const warnOverlay = document.getElementById('warningOverlay');
+            const lockOverlay = document.getElementById('lockedOverlay');
+            const blockOverlay = document.getElementById('blockedOverlay');
+            
+            // Reset overlays
+            warnOverlay.classList.add('hidden');
+            lockOverlay.classList.add('hidden');
+            blockOverlay.classList.add('hidden');
+
+            if (user.isBlocked) {
+                blockOverlay.classList.remove('hidden');
+                return; 
+            }
+            
+            if (user.isLocked) {
+                lockOverlay.classList.remove('hidden');
+                return; // Lock prevents seeing warning
+            }
+
+            if (user.warningMessage) {
+                document.getElementById('warningContent').textContent = user.warningMessage;
+                warnOverlay.classList.remove('hidden');
+            }
+        };
+
+        window.dismissWarning = async () => {
+            if(!currentUser) return;
+            try {
+                await updateDoc(doc(USERS_COLLECTION, currentUser.id), { warningMessage: null });
+                document.getElementById('warningOverlay').classList.add('hidden');
+            } catch(e) { console.error(e); }
+        };
+
+        const handleLoginSuccess = (user) => {
+            currentUser = user;
+            localStorage.setItem('ncs_user', JSON.stringify(user));
+            
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('animate-fade-in');
+            
+            updateUserHeader();
+
+            // Real-time user listener for Lock/Block/Warning
+            if (currentUserUnsubscribe) currentUserUnsubscribe();
+            currentUserUnsubscribe = onSnapshot(doc(USERS_COLLECTION, user.id), (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (data.deleted) {
+                        appLogout();
+                        return;
+                    }
+                    currentUser = { ...data, id: docSnap.id };
+                    // Update local storage to keep sync
+                    localStorage.setItem('ncs_user', JSON.stringify(currentUser));
+                    updateUserHeader();
+                    checkUserStatus(currentUser);
+                } else {
+                    // User deleted
+                    appLogout();
+                }
+            });
+
+            if (user.role === 'admin') {
+                document.getElementById('adminTabBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('adminTabBtn').classList.add('hidden');
+            }
+
+            showTab('shop');
+            loadUserOrders();
+            // loadUserMessages(); // Loaded on tab switch
+        };
+
+        const refreshUserData = async (email) => {
+            const q = query(USERS_COLLECTION, where('email', '==', email));
+            const snap = await getDocs(q);
+            if (!snap.empty) {
+                const doc = snap.docs[0];
+                const data = doc.data();
+                data.id = doc.id;
+                handleLoginSuccess(data);
+            }
+        };
+
+        const updateUserHeader = () => {
+            if(!currentUser) return;
+            document.getElementById('userNameDisplay').textContent = currentUser.name;
+            // Toon "Unlimited" voor admins, anders het creditbedrag
+            const creditsDisplay = currentUser.role === 'admin' ? '∞ Unlimited' : currentUser.credits;
+            document.getElementById('userCreditsDisplay').textContent = creditsDisplay;
+        };
+
+        // --- Tab Logic ---
+        window.showTab = (tabName) => {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+            
+            // Logic to highlight correct button (credits tab has no button in main nav list in original code, added one)
+            const tabIndex = ['shop', 'orders', 'mailbox', 'gift', 'admin'].indexOf(tabName);
+            const btns = document.querySelectorAll('.tab-btn');
+            if(btns[tabIndex]) btns[tabIndex].classList.add('active');
+
+            if(tabName === 'orders') loadUserOrders();
+            if(tabName === 'mailbox') loadUserMessages();
+            if(tabName === 'admin') loadAdminData();
+            if(tabName === 'credits') { checkMiniGameStatus(); loadCreditRequests(); }
+        };
+
+        // --- Order Logic ---
+        window.initiateOrder = (product, price) => {
+            // "App Maken" is not yet available
+            if (product === 'app') {
+                showToast("Binnenkort", "De ontwikkeling van mobiele apps is nog niet beschikbaar.", "info");
+                return;
+            }
+
+            // Admins hebben unlimited credits
+            if (currentUser.role !== 'admin' && currentUser.credits < price) {
+                showToast("Niet genoeg credits!", "Je saldo is te laag.", "error");
+                return;
+            }
+            activeProduct = product;
+            activePrice = price;
+            
+            const names = { 'website': 'Website Maken', 'game': 'Game Maken', 'app': 'App Maken', 'logo': 'Logo Ontwerp' };
+            document.getElementById('modalProductName').textContent = names[product];
+            document.getElementById('modalProductPrice').textContent = price;
+            document.getElementById('orderModal').classList.remove('hidden');
+
+            // Game Options Logic
+            if(product === 'game') {
+                document.getElementById('gameOptions').classList.remove('hidden');
+                document.querySelector('input[name="gameType"][value="web"]').checked = true;
+                toggleGameType();
+            } else {
+                document.getElementById('gameOptions').classList.add('hidden');
+            }
+        };
+
+        window.toggleGameType = () => {
+            const type = document.querySelector('input[name="gameType"]:checked').value;
+            const warn = document.getElementById('appWarning');
+            const btn = document.querySelector('#orderModal .btn-primary');
+            
+            warn.classList.toggle('hidden', type !== 'app');
+        };
+
+        window.closeOrderModal = () => {
+            document.getElementById('orderModal').classList.add('hidden');
+            document.getElementById('orderProjectName').value = '';
+            document.getElementById('orderDescription').value = '';
+        };
+
+        window.confirmOrder = async () => {
+            const projectName = document.getElementById('orderProjectName').value;
+            const description = document.getElementById('orderDescription').value;
+            let finalProductName = document.getElementById('modalProductName').textContent;
+
+            if (currentUser.isLocked) return showToast("Account Vergrendeld", "Je kunt geen bestellingen plaatsen.", "error");
+
+            if (!projectName || !description) return showToast("Fout", "Vul alle velden in", "error");
+
+            // Handle Game Type
+            if (activeProduct === 'game') {
+                const type = document.querySelector('input[name="gameType"]:checked').value;
+                if (type === 'app') return showToast("Info", "App ontwikkeling is binnenkort beschikbaar.", "error");
+            }
+
+            try {
+                // Admins betalen geen credits
+                if (currentUser.role !== 'admin') {
+                    const newCredits = currentUser.credits - activePrice;
+                    const userRef = doc(USERS_COLLECTION, currentUser.id);
+                    await updateDoc(userRef, { credits: newCredits });
+                    currentUser.credits = newCredits;
+                    updateUserHeader();
+                }
+
+                const newOrder = {
+                    userId: currentUser.id,
+                    userEmail: currentUser.email,
+                    userName: currentUser.name,
+                    productType: activeProduct,
+                    productName: finalProductName,
+                    projectName,
+                    description,
+                    status: 'In behandeling',
+                    createdAt: new Date().toISOString()
+                };
+                await addDoc(ORDERS_COLLECTION, newOrder);
+
+                showToast("Gelukt!", "Je bestelling is geplaatst.", "success");
+                closeOrderModal();
+                loadUserOrders();
+
+            } catch (e) {
+                console.error(e);
+                showToast("Fout", "Er ging iets mis bij het bestellen.", "error");
+            }
+        };
+
+        // --- Load Lists ---
+        const loadUserOrders = async () => {
+            if (ordersUnsubscribe) return; // Al live verbonden
+
+            const list = document.getElementById('ordersList');
+            list.innerHTML = '<div class="loader"></div>';
+            
+            const q = query(ORDERS_COLLECTION, where('userId', '==', currentUser.id));
+            
+            ordersUnsubscribe = onSnapshot(q, (snap) => {
+                if (snap.empty) {
+                    list.innerHTML = `
+                        <div class="text-center py-10 bg-white/40 rounded-2xl border border-dashed border-gray-300">
+                            <i class="fas fa-shopping-basket text-4xl text-gray-300 mb-3"></i>
+                            <p class="text-gray-500 font-medium">Je hebt nog geen bestellingen geplaatst.</p>
+                        </div>`;
+                    return;
+                }
+
+                let orders = [];
+                snap.forEach(d => orders.push({...d.data(), id: d.id}));
+                orders = orders.filter(o => !o.deleted); // Filter verwijderde
+                orders.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+                loadedOrders = orders;
+
+                const renderOrder = (order) => {
+                    const images = order.logoImages || (order.logoImage ? [order.logoImage] : []);
+                    
+                    return `
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 relative overflow-hidden group hover:shadow-md transition cursor-pointer fade-in-up" onclick="viewOrder('${order.id}')">
+                        <div class="absolute left-0 top-0 bottom-0 w-1.5 ${getStatusColor(order.status)}"></div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-lg text-gray-800">${order.projectName}</h4>
+                            <span class="text-xs font-bold text-gray-400 bg-gray-50 px-2 py-1 rounded-lg">${new Date(order.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="text-xs font-bold uppercase text-brand bg-indigo-50 px-2 py-1 rounded">${order.productName}</span>
+                            <span class="text-xs font-bold uppercase ${getStatusBadge(order.status)} px-2 py-1 rounded">${order.status}</span>
+                        </div>
+                        <p class="text-gray-600 text-sm leading-relaxed">${order.description}</p>
+                        ${order.productType === 'logo' && images.length > 0 ? `
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <div class="text-xs font-bold text-gray-400 uppercase mb-2">Jouw Logo Ontwerp(en)</div>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-3">
+                                ${images.map(img => `<div class="bg-gray-50 p-2 rounded-xl border border-gray-200"><img src="${img}" class="w-full h-32 object-contain rounded-lg"></div>`).join('')}
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                ${images.map((img, idx) => `<a href="${img}" download="Logo-${idx+1}.png" class="flex-1 text-center bg-brand text-white py-2 rounded-lg font-bold text-sm hover:bg-brand-dark transition shadow-sm"><i class="fas fa-download mr-1"></i> Download #${idx+1}</a>`).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>`;
+                };
+
+                list.innerHTML = orders.map(renderOrder).join('');
+            }, (error) => {
+                console.error("Fout bij laden orders:", error);
+                list.innerHTML = '<div class="text-red-500 text-center">Kon bestellingen niet laden.</div>';
+            });
+        };
+
+        window.viewOrder = (id) => {
+            const order = loadedOrders.find(o => o.id === id);
+            if(!order) return;
+
+            document.getElementById('viewOrderProjectName').textContent = order.projectName;
+            document.getElementById('viewOrderProductName').textContent = order.productName;
+            document.getElementById('viewOrderDescription').textContent = order.description;
+            document.getElementById('viewOrderDate').textContent = new Date(order.createdAt).toLocaleString();
+            
+            const statusEl = document.getElementById('viewOrderStatus');
+            statusEl.textContent = order.status;
+            statusEl.className = `px-2 py-1 rounded text-xs font-bold uppercase ${getStatusBadge(order.status)}`;
+
+            document.getElementById('viewOrderModal').classList.remove('hidden');
+        };
+
+        window.closeViewOrderModal = () => {
+            document.getElementById('viewOrderModal').classList.add('hidden');
+        };
+
+        const loadUserMessages = async () => {
+            if (messagesUnsubscribe) return; // Al live verbonden
+
+            const list = document.getElementById('mailboxList');
+            list.innerHTML = '<div class="loader"></div>';
+
+            const q = query(MESSAGES_COLLECTION, where('recipientEmail', '==', currentUser.email));
+            
+            messagesUnsubscribe = onSnapshot(q, (snap) => {
+                let msgs = [];
+                snap.forEach(d => msgs.push({...d.data(), id: d.id}));
+                msgs.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+                
+                // Filter verwijderde berichten eruit
+                msgs = msgs.filter(msg => !msg.deleted_by_recipient);
+                loadedMessages = msgs;
+
+                if (msgs.length === 0) {
+                     list.innerHTML = `
+                        <div class="text-center py-10 bg-white/40 rounded-2xl border border-dashed border-gray-300">
+                            <i class="fas fa-envelope-open text-4xl text-gray-300 mb-3"></i>
+                            <p class="text-gray-500 font-medium">Geen berichten in je inbox.</p>
+                        </div>`;
+                    return;
+                }
+
+                list.innerHTML = msgs.map(msg => `
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex gap-4 cursor-pointer hover:shadow-md transition group fade-in-up" onclick="openMessageModal('${msg.id}')">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="flex-grow">
+                            <div class="flex justify-between items-baseline mb-1">
+                                <span class="font-bold text-gray-800 text-sm">${msg.senderName || 'Systeem Bericht'}</span>
+                                <span class="text-xs text-gray-400">${new Date(msg.createdAt).toLocaleDateString()}</span>
+                            </div>
+                            <p class="text-gray-600 text-sm line-clamp-2">${linkify(msg.message)}</p>
+                        </div>
+                        <div class="flex items-center">
+                             <button onclick="event.stopPropagation(); deleteMessage('${msg.id}')" class="text-gray-300 hover:text-red-500 p-2 transition"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `).join('');
+            }, (error) => {
+                console.error("Fout bij laden berichten:", error);
+                list.innerHTML = '<div class="text-red-500 text-center">Kon berichten niet laden.</div>';
+            });
+        };
+
+        window.deleteMessage = async (id) => {
+            if(!confirm("Bericht verwijderen?")) return;
+            try {
+                // Soft-delete: instead of deleting, update the doc with a flag.
+                const msgRef = doc(MESSAGES_COLLECTION, id);
+                await updateDoc(msgRef, { deleted_by_recipient: true });
+
+                // loadUserMessages(); // Niet meer nodig, onSnapshot update automatisch!
+                showToast("Verwijderd", "Bericht is verwijderd.", "success");
+                closeMessageModal();
+            } catch(e) { 
+                console.error("Fout bij verwijderen bericht:", e);
+                showToast("Fout", "Kon bericht niet verwijderen. (Mogelijk een permissieprobleem)", "error"); 
+            }
+        };
+
+        window.linkify = (text) => {
+            var urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+            return text.replace(urlRegex, function(url) {
+                return '<a href="' + url + '" target="_blank" class="text-blue-500 underline hover:text-blue-700">' + url + '</a>';
+            });
+        };
+
+        // --- Gift Logic ---
+        window.processGift = async () => {
+            const targetEmail = document.getElementById('giftEmail').value.toLowerCase();
+            const amount = parseInt(document.getElementById('giftAmount').value);
+            const msg = document.getElementById('giftMsg').value;
+
+            if(!targetEmail || !amount || amount <= 0) return showToast("Fout", "Ongeldige invoer", "error");
+            if(currentUser.credits < amount) return showToast("Fout", "Niet genoeg credits", "error");
+            if(targetEmail === currentUser.email) return showToast("Fout", "Je kunt jezelf niets sturen", "error");
+
+            toggleLoading(true); // Reuse loader if implemented globally or just block UI
+            
+            try {
+                const q = query(USERS_COLLECTION, where('email', '==', targetEmail));
+                const snap = await getDocs(q);
+
+                if(snap.empty) {
+                     showToast("Fout", "Gebruiker niet gevonden", "error");
+                     return;
+                }
+
+                const targetDoc = snap.docs[0];
+                const targetData = targetDoc.data();
+
+                await updateDoc(doc(USERS_COLLECTION, currentUser.id), { credits: currentUser.credits - amount });
+                currentUser.credits -= amount;
+                updateUserHeader();
+
+                await updateDoc(doc(USERS_COLLECTION, targetDoc.id), { credits: targetData.credits + amount });
+
+                await addDoc(MESSAGES_COLLECTION, {
+                    recipientEmail: targetEmail,
+                    senderEmail: currentUser.email,
+                    senderName: currentUser.name,
+                    message: `🎁 Je hebt ${amount} credits ontvangen van ${currentUser.name}! "${msg}"`,
+                    createdAt: new Date().toISOString()
+                });
+
+                showToast("Succes!", "Cadeau is verstuurd.", "success");
+                document.getElementById('giftEmail').value = '';
+                document.getElementById('giftAmount').value = '';
+                document.getElementById('giftMsg').value = '';
+
+            } catch (e) {
+                console.error(e);
+                showToast("Fout", "Er ging iets mis.", "error");
+            }
+        };
+
+        // --- Credits Logic ---
+        window.buyCredits = async (amount, cost) => {
+            if(!confirm(`Wil je ${amount} credits kopen voor €${cost}? Je moet dit contant betalen bij de admin.`)) return;
+            
+            try {
+                await addDoc(ORDERS_COLLECTION, {
+                    userId: currentUser.id,
+                    userEmail: currentUser.email,
+                    userName: currentUser.name,
+                    productType: 'credits',
+                    productName: `${amount} Credits`,
+                    projectName: 'Credits Aankoop',
+                    description: `Aankoop van ${amount} credits voor €${cost}. Contante betaling vereist.`,
+                    status: 'In behandeling',
+                    createdAt: new Date().toISOString()
+                });
+                showToast("Besteld!", "Ga naar de admin om te betalen.", "success");
+
+                showTab('orders');
+            } catch(e) { showToast("Fout", "Kon niet bestellen", "error"); }
+        };
+
+        window.checkMiniGameStatus = () => {
+            const lastPlayed = currentUser.lastDailyReward ? new Date(currentUser.lastDailyReward) : new Date(0);
+            const now = new Date();
+            const diffTime = Math.abs(now - lastPlayed);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            const btn = document.getElementById('spinBtn');
+            const txt = document.getElementById('nextSpinTime');
+            
+            if(diffDays >= 7) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                txt.textContent = "Je mag draaien!";
+            } else {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                txt.textContent = `Wacht nog ${7 - diffDays} dagen.`;
+            }
+        };
+
+        window.playMiniGame = async () => {
+            const slots = document.getElementById('slotMachine');
+            const res = document.getElementById('spinResult');
+            slots.innerHTML = '🎲 🎲 🎲';
+            
+            setTimeout(async () => {
+                const win = Math.floor(Math.random() * 3) + 1; // 1-3 credits
+                slots.innerHTML = '💎 💎 💎';
+                res.textContent = `GEWONNEN! +${win} Credits`;
+                
+                await updateDoc(doc(USERS_COLLECTION, currentUser.id), {
+                    credits: currentUser.credits + win,
+                    lastDailyReward: new Date().toISOString()
+                });
+                currentUser.credits += win;
+                currentUser.lastDailyReward = new Date().toISOString();
+                updateUserHeader();
+                checkMiniGameStatus();
+                showToast("Gewonnen!", `${win} credits toegevoegd.`, "success");
+            }, 1000);
+        };
+
+        const loadCreditRequests = async () => {
+            const list = document.getElementById('creditRequestsList');
+            list.innerHTML = '<div class="loader"></div>';
+            
+            try {
+                const q = query(ORDERS_COLLECTION, where('userId', '==', currentUser.id), where('productType', '==', 'credits'));
+                const snap = await getDocs(q);
+                let reqs = [];
+                snap.forEach(d => reqs.push({...d.data(), id: d.id}));
+                reqs = reqs.filter(r => !r.deleted);
+                reqs.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+                
+                if(reqs.length === 0) { list.innerHTML = '<div class="text-gray-400 text-sm">Geen aanvragen.</div>'; return; }
+                
+                list.innerHTML = reqs.map(r => `
+                    <div class="bg-white p-4 rounded-xl border border-gray-200 flex justify-between items-center fade-in-up">
+                        <div>
+                            <div class="font-bold text-gray-800">${r.productName}</div>
+                            <div class="text-xs text-gray-500">${new Date(r.createdAt).toLocaleDateString()} - <span class="${getStatusBadge(r.status)}">${r.status}</span></div>
+                            ${r.paymentLocation ? `<div class="text-sm text-brand font-bold mt-1"><i class="fas fa-map-marker-alt mr-1"></i> Betaal bij: ${r.paymentLocation}</div>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+            } catch(e) { console.error(e); }
+        };
+
+        // --- Admin Logic ---
+        const loadAdminData = async () => {
+            if (adminUsersUnsubscribe) return; // Al live verbonden
+
+            const userListEl = document.getElementById('adminUsersList');
+            const userSelect = document.getElementById('adminMsgSelect');
+            
+            userListEl.innerHTML = '<div class="loader"></div>';
+
+            // --- Live Users ---
+            adminUsersUnsubscribe = onSnapshot(USERS_COLLECTION, (snapshot) => {
+                let users = [];
+                let totalCredits = 0;
+                snapshot.forEach(d => users.push({...d.data(), id: d.id}));
+                
+                users = users.filter(u => !u.deleted); // Filter verwijderde gebruikers
+                
+                users.forEach(u => totalCredits += (u.credits || 0));
+                users = users.filter(u => u.id !== currentUser.id);
+                adminUsersData = users;
+                
+                const resetCount = users.filter(u => u.passwordResetStatus === 'requested').length;
+                
+                document.getElementById('statUsers').textContent = users.length;
+                document.getElementById('statCredits').textContent = totalCredits;
+                document.getElementById('statResets').textContent = resetCount;
+                
+                filterAdminUsers();
+
+                // Update Dropdown (behoud selectie indien mogelijk)
+                const currentVal = userSelect.value;
+                userSelect.innerHTML = '<option value="">-- Kies een gebruiker --</option>';
+                users.forEach(u => {
+                    const option = document.createElement('option');
+                    option.value = u.email;
+                    option.textContent = `${u.name}`;
+                    userSelect.appendChild(option);
+                });
+                if(currentVal) userSelect.value = currentVal;
+            });
+
+            // --- Live Orders ---
+            adminOrdersUnsubscribe = onSnapshot(ORDERS_COLLECTION, (snapshot) => {
+                let orders = [];
+                snapshot.forEach(d => orders.push({...d.data(), id: d.id}));
+                orders = orders.filter(o => !o.deleted); // Filter verwijderde
+                orders.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+                adminOrdersData = orders;
+                
+                const activeCount = orders.filter(o => o.status !== 'Voltooid' && o.status !== 'Afgehandeld').length;
+                document.getElementById('statOrders').textContent = activeCount;
+                
+                filterAdminOrders();
+            });
+
+            // --- Live Messages (Complaints) ---
+            const qMsgs = query(MESSAGES_COLLECTION, where('recipientEmail', '==', 'cankayanaim66@gmail.com'));
+            adminMessagesUnsubscribe = onSnapshot(qMsgs, (snapshot) => {
+                let allAdminMessages = [];
+                snapshot.forEach(d => allAdminMessages.push({...d.data(), id: d.id}));
+                allAdminMessages.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+                const complaints = allAdminMessages.filter(m => m.message && m.message.startsWith('KLACHT/VRAAG:'));
+                const otherMessages = allAdminMessages.filter(m => !m.message || !m.message.startsWith('KLACHT/VRAAG:'));
+
+                const complaintsListEl = document.getElementById('adminComplaintsList');
+                const otherMessagesListEl = document.getElementById('adminOtherMessagesList');
+
+                // Render Complaints
+                if(complaints.length === 0) {
+                    complaintsListEl.innerHTML = '<div class="text-center text-gray-400 text-sm mt-10">Geen klachten gevonden.</div>';
+                } else {
+                    complaintsListEl.innerHTML = complaints.map(c => `
+                        <div class="bg-red-50 p-3 rounded-lg border border-red-100 text-sm fade-in-up">
+                            <div class="flex justify-between mb-1">
+                                <span class="font-bold text-gray-800">${c.senderName || 'Onbekend'}</span>
+                                <span class="text-xs text-gray-500">${new Date(c.createdAt).toLocaleDateString()}</span>
+                            </div>
+                            <p class="text-gray-600 italic">"${c.message}"</p>
+                        </div>
+                    `).join('');
+                }
+
+                // Render Other Messages
+                if(otherMessages.length === 0) {
+                    otherMessagesListEl.innerHTML = '<div class="text-center text-gray-400 text-sm mt-10">Geen overige berichten.</div>';
+                } else {
+                    otherMessagesListEl.innerHTML = otherMessages.map(m => `
+                        <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 text-sm fade-in-up">
+                            <div class="flex justify-between mb-1"><span class="font-bold text-gray-800">${m.senderName || 'Onbekende Afzender'}</span><span class="text-xs text-gray-500">${new Date(m.createdAt).toLocaleDateString()}</span></div>
+                            <p class="text-gray-600 italic line-clamp-3">"${m.message}"</p>
+                        </div>
+                    `).join('');
+                }
+            });
+        };
+
+        window.filterAdminUsers = () => {
+            const search = document.getElementById('adminUserSearch').value.toLowerCase();
+            const list = document.getElementById('adminUsersList');
+            
+            const filtered = adminUsersData.filter(u => 
+                u.name.toLowerCase().includes(search) || 
+                u.email.toLowerCase().includes(search)
+            );
+            
+            if(filtered.length === 0) {
+                list.innerHTML = '<div class="text-center text-gray-400 text-sm py-4">Geen gebruikers gevonden.</div>';
+                return;
+            }
+
+            list.innerHTML = filtered.map(u => `
+                <div class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-100 hover:bg-white hover:shadow-sm transition fade-in-up">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-indigo-100 text-brand flex items-center justify-center text-xs font-bold">
+                            ${u.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                            <div class="font-bold text-gray-800 text-sm">${u.name}</div>
+                            <div class="text-gray-400 text-xs">${u.email}</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-bold text-brand bg-indigo-50 px-2 py-1 rounded text-xs">${u.credits} Cr</span>
+                        ${u.passwordResetStatus === 'requested' ? `
+                        <button onclick="adminApproveReset('${u.id}')" class="w-6 h-6 rounded bg-red-100 text-red-600 hover:bg-red-200 flex items-center justify-center transition animate-pulse" title="Wachtwoord Reset Goedkeuren"><i class="fas fa-key text-xs"></i></button>
+                        ` : ''}
+                        <button onclick="adminAddCredits('${u.id}', ${u.credits})" class="w-6 h-6 rounded bg-green-100 text-green-600 hover:bg-green-200 flex items-center justify-center transition" title="Credits toevoegen">
+                            <i class="fas fa-plus text-xs"></i>
+                        </button>
+                        <button onclick="adminRemoveCredits('${u.id}', ${u.credits})" class="w-6 h-6 rounded bg-yellow-100 text-yellow-600 hover:bg-yellow-200 flex items-center justify-center transition" title="Credits verwijderen">
+                            <i class="fas fa-minus text-xs"></i>
+                        </button>
+                        <button onclick="openSpecialAdmin('${u.id}')" class="w-6 h-6 rounded bg-purple-100 text-purple-600 hover:bg-purple-200 flex items-center justify-center transition" title="Speciale Admin">
+                            <i class="fas fa-shield-alt text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        window.filterAdminOrders = () => {
+            const search = document.getElementById('adminOrderSearch').value.toLowerCase();
+            const filter = document.getElementById('adminOrderFilter').value;
+            const list = document.getElementById('adminOrdersList');
+            
+            let filtered = adminOrdersData.filter(o => 
+                (o.projectName || '').toLowerCase().includes(search) ||
+                (o.userName || '').toLowerCase().includes(search) ||
+                (o.productName || '').toLowerCase().includes(search)
+            );
+            
+            if (filter === 'active') {
+                filtered = filtered.filter(o => o.status !== 'Voltooid' && o.status !== 'Afgehandeld');
+            } else if (filter === 'completed') {
+                filtered = filtered.filter(o => o.status === 'Voltooid' || o.status === 'Afgehandeld');
+            }
+            
+            if(filtered.length === 0) {
+                list.innerHTML = '<div class="text-center text-gray-400 text-sm py-8">Geen bestellingen gevonden.</div>';
+                return;
+            }
+
+            list.innerHTML = filtered.map(o => `
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 text-sm fade-in-up">
+                    <div class="flex justify-between mb-2 pb-2 border-b border-gray-100">
+                        <span class="font-bold text-brand">${o.projectName}</span>
+                        <span class="text-xs bg-gray-100 px-2 py-1 rounded font-medium">${o.status}</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mb-3">
+                         <div>
+                            <div class="text-xs text-gray-400 uppercase font-bold">Klant</div>
+                            <div class="text-gray-700 font-medium">${o.userName}</div>
+                         </div>
+                         <div>
+                            <div class="text-xs text-gray-400 uppercase font-bold">Type</div>
+                            <div class="text-gray-700 font-medium">${o.productName}</div>
+                         </div>
+                    </div>
+                    <p class="bg-gray-50 p-2 rounded text-gray-600 italic text-xs mb-3">"${o.description}"</p>
+                    <div class="flex gap-2">
+                        <button onclick="updateOrderStatus('${o.id}', 'In behandeling')" class="flex-1 py-1.5 bg-yellow-50 text-yellow-600 hover:bg-yellow-100 rounded-lg text-xs font-bold transition">Behandelen</button>
+                        ${o.productType === 'credits' ? (o.status === 'Wacht op betaling' ? `
+                            <button onclick="confirmCreditPayment('${o.id}', '${o.userId}', '${o.productName}')" class="flex-1 py-1.5 bg-green-50 text-green-600 hover:bg-green-100 rounded-lg text-xs font-bold transition">
+                                <i class="fas fa-check mr-1"></i> Betaald
+                            </button>
+                        ` : `
+                            <button onclick="setPaymentLocation('${o.id}')" class="flex-1 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg text-xs font-bold transition">
+                                <i class="fas fa-map-marker-alt mr-1"></i> Locatie
+                            </button>
+                        `) : o.productType === 'logo' ? `
+                            <input type="file" id="file-${o.id}" class="hidden" accept="image/*" multiple onchange="uploadLogoResult('${o.id}', '${o.userEmail}', this)">
+                            <button onclick="document.getElementById('file-${o.id}').click()" class="flex-1 py-1.5 bg-purple-50 text-purple-600 hover:bg-purple-100 rounded-lg text-xs font-bold transition">
+                                <i class="fas fa-upload mr-1"></i> Upload Logo
+                            </button>
+                        ` : `
+                            <button onclick="completeOrderWithPin('${o.id}', '${o.userEmail}')" class="flex-1 py-1.5 bg-green-50 text-green-600 hover:bg-green-100 rounded-lg text-xs font-bold transition">Voltooid</button>
+                        `}
+                        <button onclick="deleteOrder('${o.id}')" class="py-1.5 px-3 bg-red-50 text-red-500 hover:bg-red-100 rounded-lg text-xs font-bold transition" title="Verwijderen"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        };
+        
+        window.deleteOrder = async (id) => {
+            if(!confirm("Weet je zeker dat je deze bestelling wilt verwijderen?")) return;
+            try {
+                // Probeer hard delete
+                await deleteDoc(doc(ORDERS_COLLECTION, id)); 
+                showToast("Verwijderd", "Bestelling verwijderd", "success");
+            } catch(e) { 
+                console.error("Hard delete failed, trying soft delete", e);
+                try {
+                    await updateDoc(doc(ORDERS_COLLECTION, id), { deleted: true, status: 'Verwijderd' });
+                    showToast("Verwijderd", "Bestelling verwijderd (soft)", "success");
+                } catch(e2) { showToast("Fout", "Kon niet verwijderen", "error"); }
+            }
+        };
+
+        // --- Special Admin Logic ---
+        window.openSpecialAdmin = (userId) => {
+            const user = adminUsersData.find(u => u.id === userId);
+            if (!user) return;
+            selectedAdminUser = user;
+
+            document.getElementById('saUserName').textContent = user.name;
+            document.getElementById('saUserEmail').textContent = user.email;
+            document.getElementById('saUserIcon').textContent = user.name.charAt(0).toUpperCase();
+            
+            updateSpecialAdminButtons();
+            document.getElementById('specialAdminModal').classList.remove('hidden');
+        };
+
+        window.closeSpecialAdminModal = () => {
+            document.getElementById('specialAdminModal').classList.add('hidden');
+            selectedAdminUser = null;
+        };
+
+        function updateSpecialAdminButtons() {
+            const u = selectedAdminUser;
+            const blockBtn = document.getElementById('saBlockBtn');
+            const lockBtn = document.getElementById('saLockBtn');
+
+            if (u.isBlocked) {
+                blockBtn.className = "w-full bg-gray-800 text-white hover:bg-gray-900 py-3 rounded-xl font-bold transition shadow-sm flex items-center justify-center gap-2";
+                blockBtn.innerHTML = '<i class="fas fa-unlock"></i> Deblokkeren (Toegang herstellen)';
+            } else {
+                blockBtn.className = "w-full bg-red-50 text-red-600 border border-red-100 hover:bg-red-100 py-3 rounded-xl font-bold transition shadow-sm flex items-center justify-center gap-2";
+                blockBtn.innerHTML = '<i class="fas fa-ban"></i> Blokkeren (Geen toegang)';
+            }
+
+            if (u.isLocked) {
+                lockBtn.className = "w-full bg-blue-600 text-white hover:bg-blue-700 py-3 rounded-xl font-bold transition shadow-sm flex items-center justify-center gap-2";
+                lockBtn.innerHTML = '<i class="fas fa-lock-open"></i> Ontgrendelen (Bestellen toestaan)';
+            } else {
+                lockBtn.className = "w-full bg-blue-50 text-blue-600 border border-blue-100 hover:bg-blue-100 py-3 rounded-xl font-bold transition shadow-sm flex items-center justify-center gap-2";
+                lockBtn.innerHTML = '<i class="fas fa-lock"></i> Vergrendelen (Geen bestellingen)';
+            }
+        }
+
+        window.saToggleBlock = async () => {
+            if(!selectedAdminUser) return;
+            const newState = !selectedAdminUser.isBlocked;
+            try {
+                await updateDoc(doc(USERS_COLLECTION, selectedAdminUser.id), { isBlocked: newState });
+                selectedAdminUser.isBlocked = newState;
+                updateSpecialAdminButtons();
+                showToast("Aangepast", `Gebruiker is ${newState ? 'geblokkeerd' : 'gedeblokkeerd'}.`, "success");
+            } catch(e) { showToast("Fout", "Kon status niet aanpassen", "error"); }
+        };
+
+        window.saToggleLock = async () => {
+            if(!selectedAdminUser) return;
+            const newState = !selectedAdminUser.isLocked;
+            try {
+                await updateDoc(doc(USERS_COLLECTION, selectedAdminUser.id), { isLocked: newState });
+                selectedAdminUser.isLocked = newState;
+                updateSpecialAdminButtons();
+                showToast("Aangepast", `Gebruiker is ${newState ? 'vergrendeld' : 'ontgrendeld'}.`, "success");
+            } catch(e) { showToast("Fout", "Kon status niet aanpassen", "error"); }
+        };
+
+        window.saWarnUser = async () => {
+            if(!selectedAdminUser) return;
+            const reason = prompt("Reden voor waarschuwing:");
+            if(!reason) return;
+            
+            try {
+                await updateDoc(doc(USERS_COLLECTION, selectedAdminUser.id), { warningMessage: reason });
+                showToast("Verzonden", "Waarschuwing verstuurd.", "success");
+            } catch(e) { showToast("Fout", "Kon waarschuwing niet versturen", "error"); }
+        };
+
+        window.adminApproveReset = async (userId) => {
+            if(!confirm("Wil je toestaan dat deze gebruiker zijn wachtwoord wijzigt?")) return;
+            try {
+                await updateDoc(doc(USERS_COLLECTION, userId), { passwordResetStatus: 'approved' });
+                showToast("Goedgekeurd", "Gebruiker kan nu wachtwoord wijzigen.", "success");
+            } catch(e) { showToast("Fout", "Kon niet goedkeuren", "error"); }
+        };
+
+        window.saDeleteUser = async () => {
+            if(!selectedAdminUser) return;
+            if (!confirm(`Weet je zeker dat je gebruiker '${selectedAdminUser.name}' wilt verwijderen? Dit kan niet ongedaan worden gemaakt.`)) return;
+            
+            try {
+                await deleteDoc(doc(USERS_COLLECTION, selectedAdminUser.id));
+                showToast("Verwijderd", `Gebruiker verwijderd.`, "success");
+                closeSpecialAdminModal();
+            } catch (e) {
+                console.error("Hard delete failed, trying soft delete", e);
+                try {
+                    await updateDoc(doc(USERS_COLLECTION, selectedAdminUser.id), { deleted: true });
+                    showToast("Verwijderd", `Gebruiker verwijderd.`, "success");
+                    closeSpecialAdminModal();
+                } catch (e2) {
+                    console.error(e2);
+                    showToast("Fout", "Kon gebruiker niet verwijderen.", "error");
+                }
+            }
+        };
+
+        window.adminAddCredits = async (userId, currentCredits) => {
+            const amount = prompt("Hoeveel credits toevoegen?", "5");
+            if (!amount) return;
+            if (isNaN(parseInt(amount))) return showToast("Fout", "Voer een geldig getal in", "error");
+            const toAdd = parseInt(amount);
+            
+            try {
+                await updateDoc(doc(USERS_COLLECTION, userId), { credits: currentCredits + toAdd });
+                loadAdminData();
+                showToast("Succes", "Credits toegevoegd", "success");
+            } catch (e) { showToast("Fout", "Kon credits niet toevoegen", "error"); }
+        };
+
+        window.adminRemoveCredits = async (userId, currentCredits) => {
+            const amount = prompt("Hoeveel credits verwijderen?", "5");
+            if (!amount) return;
+            if (isNaN(parseInt(amount))) return showToast("Fout", "Voer een geldig getal in", "error");
+            const toRemove = parseInt(amount);
+            
+            try {
+                await updateDoc(doc(USERS_COLLECTION, userId), { credits: Math.max(0, currentCredits - toRemove) });
+                showToast("Succes", "Credits verwijderd", "success");
+            } catch (e) { showToast("Fout", "Kon credits niet verwijderen", "error"); }
+        };
+
+        window.updateOrderStatus = async (orderId, newStatus) => {
+            try {
+                await updateDoc(doc(ORDERS_COLLECTION, orderId), { status: newStatus });
+                loadAdminData();
+                showToast("Update", `Status veranderd naar ${newStatus}`, "success");
+            } catch (e) { showToast("Fout", "Status update mislukt", "error"); }
+        };
+
+        window.setPaymentLocation = async (orderId) => {
+            const loc = prompt("Waar moet de gebruiker betalen? (Bijv. Balie A)");
+            if(!loc) return;
+            try {
+                await updateDoc(doc(ORDERS_COLLECTION, orderId), { paymentLocation: loc, status: 'Wacht op betaling' });
+                loadAdminData();
+                showToast("Opgeslagen", "Locatie doorgegeven.", "success");
+            } catch(e) { showToast("Fout", "Kon locatie niet opslaan", "error"); }
+        };
+
+        window.confirmCreditPayment = async (orderId, userId, productName) => {
+            const amount = parseInt(productName);
+            if(isNaN(amount)) return showToast("Fout", "Kan aantal niet lezen", "error");
+            
+            if(!confirm(`Bevestig betaling: ${amount} credits toevoegen aan gebruiker?`)) return;
+
+            try {
+                const userRef = doc(USERS_COLLECTION, userId);
+                const userSnap = await getDoc(userRef);
+                if (!userSnap.exists()) throw new Error("Gebruiker niet gevonden");
+                
+                const currentCredits = userSnap.data().credits || 0;
+                
+                await updateDoc(userRef, { credits: currentCredits + amount });
+                await updateDoc(doc(ORDERS_COLLECTION, orderId), { status: 'Afgehandeld' });
+                
+                loadAdminData();
+                showToast("Succes", `${amount} credits toegevoegd en bestelling afgerond.`, "success");
+            } catch(e) { console.error(e); showToast("Fout", "Kon transactie niet voltooien", "error"); }
+        };
+
+        window.completeOrderWithPin = async (orderId, userEmail) => {
+            const pin = prompt("Voer de 4-cijferige project PIN in:");
+            if (!pin || pin.length !== 4 || isNaN(pin)) {
+                showToast("Fout", "PIN moet 4 cijfers zijn", "error");
+                return;
+            }
+
+            try {
+                await updateDoc(doc(ORDERS_COLLECTION, orderId), { status: 'Voltooid', projectPin: pin });
+                
+                await addDoc(MESSAGES_COLLECTION, {
+                    recipientEmail: userEmail,
+                    message: `✅ Je project is voltooid! Hier is je project PIN: ${pin}\n\nBezoek je project op: https://naim-cloud-software.netlify.app`,
+                    createdAt: new Date().toISOString()
+                });
+
+                showToast("Succes", "Bestelling voltooid en PIN verstuurd", "success");
+                loadAdminData();
+            } catch (e) {
+                console.error(e);
+                showToast("Fout", "Kon bestelling niet voltooien", "error");
+            }
+        };
+
+        window.uploadLogoResult = async (orderId, userEmail, input) => {
+            if (input.files && input.files.length > 0) {
+                const files = Array.from(input.files);
+                
+                // Check sizes
+                for (let file of files) {
+                    if (file.size > 800 * 1024) {
+                        showToast("Fout", `Bestand ${file.name} is te groot (max 800KB)`, "error");
+                        return;
+                    }
+                }
+
+                const readPromises = files.map(file => {
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = e => resolve(e.target.result);
+                        reader.onerror = reject;
+                        reader.readAsDataURL(file);
+                    });
+                });
+
+                try {
+                    const base64Images = await Promise.all(readPromises);
+                    
+                    await updateDoc(doc(ORDERS_COLLECTION, orderId), { 
+                        status: 'Voltooid', 
+                        logoImages: base64Images 
+                    });
+                    
+                        await addDoc(MESSAGES_COLLECTION, {
+                            recipientEmail: userEmail,
+                            senderEmail: currentUser.email,
+                            senderName: 'Admin',
+                            message: `🎨 Je logo ontwerp is klaar! Bekijk het bij je bestellingen.`,
+                            createdAt: new Date().toISOString()
+                        });
+
+                        showToast("Succes", "Logo geüpload en bestelling voltooid!", "success");
+                        loadAdminData();
+                } catch (err) { 
+                    console.error(err);
+                    showToast("Fout", "Upload mislukt", "error"); 
+                }
+            }
+        };
+
+        window.adminSendMessage = async () => {
+            const email = document.getElementById('adminMsgSelect').value;
+            const msg = document.getElementById('adminMsgText').value;
+            if(!email || !msg) return showToast("Fout", "Vul alles in", "error");
+            
+            try {
+                await addDoc(MESSAGES_COLLECTION, {
+                    recipientEmail: email,
+                    senderEmail: currentUser.email,
+                    senderName: 'Admin',
+                    message: msg,
+                    createdAt: new Date().toISOString()
+                });
+                showToast("Verzonden", "Bericht verstuurd", "success");
+                document.getElementById('adminMsgText').value = '';
+            } catch(e) { showToast("Fout", "Kon niet verzenden", "error"); }
+        };
+
+        window.openMessageModal = (id) => {
+            const msg = loadedMessages.find(m => m.id === id);
+            if(!msg) return;
+
+            currentMessageId = id;
+            currentReplyEmail = msg.senderEmail || null;
+
+            document.getElementById('modalMessageContent').innerHTML = linkify(msg.message).replace(/\n/g, '<br>');
+            document.getElementById('modalMessageDate').textContent = new Date(msg.createdAt).toLocaleString();
+            document.getElementById('modalSenderInfo').textContent = msg.senderName ? `Van: ${msg.senderName}` : 'Van: Systeem';
+            
+            // Setup reply button
+            const replyBtn = document.getElementById('replyBtn');
+            if(currentReplyEmail) {
+                replyBtn.classList.remove('hidden');
+                replyBtn.textContent = `Reageren naar ${msg.senderName || 'Afzender'}`;
+            } else {
+                replyBtn.classList.add('hidden');
+            }
+            
+            document.getElementById('replySection').classList.add('hidden');
+            document.getElementById('replyText').value = '';
+            document.getElementById('messageModal').classList.remove('hidden');
+        };
+
+        window.closeMessageModal = () => {
+            document.getElementById('messageModal').classList.add('hidden');
+        };
+
+        window.deleteCurrentMessage = () => {
+            if(currentMessageId) deleteMessage(currentMessageId);
+        };
+
+        window.toggleReply = () => {
+            document.getElementById('replySection').classList.toggle('hidden');
+        };
+
+        window.sendReply = async () => {
+            const text = document.getElementById('replyText').value;
+            if(!text || !currentReplyEmail) return;
+
+            try {
+                await addDoc(MESSAGES_COLLECTION, {
+                    recipientEmail: currentReplyEmail,
+                    senderEmail: currentUser.email,
+                    senderName: currentUser.name,
+                    message: `RE: ${text}`,
+                    createdAt: new Date().toISOString()
+                });
+                showToast("Verzonden", "Reactie verstuurd!", "success");
+                document.getElementById('replySection').classList.add('hidden');
+                document.getElementById('replyText').value = '';
+            } catch(e) { showToast("Fout", "Kon reactie niet versturen", "error"); }
+        };
+
+        // --- Complaint Logic ---
+        window.openComplaintModal = () => {
+            document.getElementById('complaintModal').classList.remove('hidden');
+        };
+        window.closeComplaintModal = () => {
+            document.getElementById('complaintModal').classList.add('hidden');
+        };
+        window.submitComplaint = async () => {
+            const text = document.getElementById('complaintText').value;
+            if(!text) return showToast("Fout", "Vul een bericht in", "error");
+            
+            try {
+                await addDoc(MESSAGES_COLLECTION, {
+                    recipientEmail: 'cankayanaim66@gmail.com', // Admin email
+                    senderEmail: currentUser.email,
+                    senderName: currentUser.name,
+                    message: `KLACHT/VRAAG: ${text}`,
+                    createdAt: new Date().toISOString()
+                });
+                showToast("Verzonden", "Je klacht is verstuurd naar de admin.", "success");
+                closeComplaintModal();
+                document.getElementById('complaintText').value = '';
+            } catch(e) { showToast("Fout", "Kon niet versturen", "error"); }
+        };
+
+        // --- Helpers ---
+        function getStatusColor(status) {
+            if(status === 'Voltooid') return 'bg-green-500';
+            if(status === 'In behandeling') return 'bg-yellow-500';
+            return 'bg-gray-300';
+        }
+
+        function getStatusBadge(status) {
+             if(status === 'Voltooid') return 'bg-green-100 text-green-600';
+            if(status === 'In behandeling') return 'bg-yellow-100 text-yellow-600';
+            if(status === 'Wacht op betaling') return 'bg-blue-100 text-blue-600';
+            return 'bg-gray-100 text-gray-500';
+        }
+
+        function showAuthMsg(msg, type) {
+            const el = document.getElementById('authMessage');
+            el.textContent = msg;
+            el.className = `mt-4 text-center text-sm font-medium ${type === 'error' ? 'text-red-500' : 'text-green-600'}`;
+        }
+
+        function toggleLoading(show) {
+            document.getElementById('loadingIndicator').classList.toggle('hidden', !show);
+        }
+
+        function showToast(title, msg, type) {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            
+            document.getElementById('toastTitle').textContent = title;
+            document.getElementById('toastMsg').textContent = msg;
+            
+            if (type === 'error') {
+                icon.innerHTML = '<i class="fas fa-exclamation-circle text-red-500"></i>';
+                toast.classList.add('border-l-red-500');
+                toast.classList.remove('border-l-brand', 'border-l-green-500');
+            } else {
+                icon.innerHTML = '<i class="fas fa-check-circle text-green-500"></i>';
+                toast.classList.add('border-l-green-500');
+                toast.classList.remove('border-l-brand', 'border-l-red-500');
+            }
+            
+            toast.classList.remove('hidden', 'translate-x-full');
+            setTimeout(() => {
+                 toast.classList.add('translate-x-full');
+                 setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 3000);
+        }
+
+        // Start App
+        init();
+
+        // Make functions global for HTML onClick events
+        window.adminAddCredits = window.adminAddCredits;
+        window.adminRemoveCredits = window.adminRemoveCredits;
+        window.updateOrderStatus = window.updateOrderStatus;
+    </script>
+</body>
+</html>
