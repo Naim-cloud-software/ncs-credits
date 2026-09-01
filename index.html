@@ -339,9 +339,9 @@
             </div>
         </div>
 
-        <!-- Order Modal -->
+<!-- Order Modal -->
         <div id="orderModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
-            <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform transition-all scale-100">
+            <div class="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl transform transition-all scale-100 max-h-[90vh] overflow-y-auto">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-2xl font-bold text-gray-800">Bevestig Bestelling</h3>
                     <button onclick="closeOrderModal()" class="text-gray-400 hover:text-gray-600">
@@ -351,22 +351,65 @@
                 
                 <div class="bg-indigo-50 p-4 rounded-xl mb-6 border border-indigo-100">
                     <div class="text-sm text-gray-500 uppercase font-bold mb-1">Product</div>
-                    <div class="text-lg font-bold text-brand mb-2" id="modalProductName"></div>
+                    <div class="text-lg font-bold text-indigo-600 mb-2" id="modalProductName">Website Maken (Normaal)</div>
                     <div class="flex justify-between items-center border-t border-indigo-200 pt-2 mt-2">
                         <span class="text-gray-600 font-medium">Kosten:</span>
-                        <span class="text-xl font-bold text-gray-800"><span id="modalProductPrice"></span> Credits</span>
+                        <span class="text-xl font-bold text-gray-800"><span id="modalProductPrice">1</span> Credits</span>
                     </div>
                 </div>
 
-                <!-- Game Options (Hidden by default) -->
+                <!-- Website Modellen Kiesmenu -->
+                <div id="websiteTierContainer" class="mb-6">
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Kies je model:</label>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                        
+                        <!-- Model 1: Normaal -->
+                        <label class="cursor-pointer">
+                            <input type="radio" name="websiteTier" value="Normaal" checked onchange="updateTierSelection('Normaal', 1)" class="hidden peer">
+                            <div class="border-2 border-gray-200 rounded-xl p-3 text-center peer-checked:border-indigo-600 peer-checked:bg-indigo-50 transition h-full flex flex-col items-center justify-between">
+                                <i class="fas fa-globe text-2xl text-indigo-500 mb-1"></i>
+                                <div class="font-bold text-gray-800 text-sm">Normaal</div>
+                                <div class="text-xs font-semibold text-indigo-600 mb-1">1 Credit</div>
+                                <div class="text-[10px] text-gray-500 leading-tight">1 pagina & basisfuncties.</div>
+                            </div>
+                        </label>
+
+                        <!-- Model 2: Pro -->
+                        <label class="cursor-pointer">
+                            <input type="radio" name="websiteTier" value="Pro" onchange="updateTierSelection('Pro', 2)" class="hidden peer">
+                            <div class="border-2 border-gray-200 rounded-xl p-3 text-center peer-checked:border-purple-600 peer-checked:bg-purple-50 transition h-full flex flex-col items-center justify-between">
+                                <i class="fas fa-rocket text-2xl text-purple-500 mb-1"></i>
+                                <div class="font-bold text-gray-800 text-sm">Pro</div>
+                                <div class="text-xs font-semibold text-purple-600 mb-1">2 Credits</div>
+                                <div class="text-[10px] text-gray-500 leading-tight">Meerdere pagina's & animaties.</div>
+                            </div>
+                        </label>
+
+                        <!-- Model 3: Max -->
+                        <label class="cursor-pointer">
+                            <input type="radio" name="websiteTier" value="Max" onchange="updateTierSelection('Max', 3)" class="hidden peer">
+                            <div class="border-2 border-gray-200 rounded-xl p-3 text-center peer-checked:border-amber-500 peer-checked:bg-amber-50 transition h-full flex flex-col items-center justify-between">
+                                <i class="fas fa-crown text-2xl text-amber-500 mb-1"></i>
+                                <div class="font-bold text-gray-800 text-sm">Max</div>
+                                <div class="text-xs font-semibold text-amber-600 mb-1">3 Credits</div>
+                                <div class="text-[10px] text-gray-500 leading-tight">Webshop, accounts & maatwerk.</div>
+                            </div>
+                        </label>
+
+                    </div>
+                </div>
+
+                <!-- Game Options (Hidden door JS als het geen game is) -->
                 <div id="gameOptions" class="hidden mb-6 bg-purple-50 p-4 rounded-xl border border-purple-100">
                     <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Type Game</label>
                     <div class="flex gap-2">
-                        <label class="flex-1 cursor-pointer"><input type="radio" name="gameType" value="web" checked class="hidden peer" onchange="toggleGameType()">
-                            <div class="text-center py-2 rounded-lg border border-purple-200 bg-white peer-checked:bg-brand peer-checked:text-white transition text-sm font-bold">Web Game</div>
+                        <label class="flex-1 cursor-pointer">
+                            <input type="radio" name="gameType" value="web" checked class="hidden peer" onchange="toggleGameType()">
+                            <div class="text-center py-2 rounded-lg border border-purple-200 bg-white peer-checked:bg-indigo-600 peer-checked:text-white transition text-sm font-bold">Web Game</div>
                         </label>
-                        <label class="flex-1 cursor-pointer"><input type="radio" name="gameType" value="app" class="hidden peer" onchange="toggleGameType()">
-                            <div class="text-center py-2 rounded-lg border border-purple-200 bg-white peer-checked:bg-brand peer-checked:text-white transition text-sm font-bold">App</div>
+                        <label class="flex-1 cursor-pointer">
+                            <input type="radio" name="gameType" value="app" class="hidden peer" onchange="toggleGameType()">
+                            <div class="text-center py-2 rounded-lg border border-purple-200 bg-white peer-checked:bg-indigo-600 peer-checked:text-white transition text-sm font-bold">App</div>
                         </label>
                     </div>
                     <div id="appWarning" class="hidden mt-2 text-xs text-orange-600 font-bold text-center bg-orange-50 p-2 rounded"><i class="fas fa-clock mr-1"></i> Binnenkort beschikbaar!</div>
@@ -375,21 +418,20 @@
                 <div class="space-y-4 mb-6">
                     <div>
                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Naam Project</label>
-                        <input type="text" id="orderProjectName" placeholder="Mijn Geweldige Project" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition">
+                        <input type="text" id="orderProjectName" placeholder="Mijn Geweldige Project" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Beschrijving</label>
-                        <textarea id="orderDescription" rows="3" placeholder="Vertel ons wat je precies wilt..." class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition"></textarea>
+                        <textarea id="orderDescription" rows="3" placeholder="Vertel ons wat je precies wilt..." class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"></textarea>
                     </div>
                 </div>
                 
                 <div class="flex gap-3">
                     <button onclick="closeOrderModal()" class="flex-1 bg-gray-100 text-gray-600 py-3 rounded-xl font-bold hover:bg-gray-200 transition">Annuleren</button>
-                    <button onclick="confirmOrder()" class="flex-1 btn-primary text-white py-3 rounded-xl font-bold shadow-lg">Bevestigen</button>
+                    <button onclick="confirmWebsiteOrder()" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-bold shadow-lg transition">Bevestigen</button>
                 </div>
             </div>
         </div>
-
         <!-- Complaint Modal -->
         <div id="complaintModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
             <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform transition-all scale-100">
@@ -2141,6 +2183,57 @@
         window.adminAddCredits = window.adminAddCredits;
         window.adminRemoveCredits = window.adminRemoveCredits;
         window.updateOrderStatus = window.updateOrderStatus;
+
+let currentModelName = 'Normaal';
+let currentModelPrice = 1;
+
+function setWebsiteTier(name, price) {
+    currentModelName = name;
+    currentModelPrice = price;
+}
+
+// Pas je bestaande confirmOrder aan met deze simpele check:
+function confirmOrder() {
+    const name = document.getElementById('orderProjectName').value.trim();
+    const desc = document.getElementById('orderDescription').value.trim();
+
+    if(!name || !desc) return showToast('Fout', 'Vul alle velden in', 'error');
+
+    // Als het een website is pakken we de model prijs, anders de standaard prijs
+    const price = selectedProduct === 'website' ? currentModelPrice : 1;
+    const prodTitle = selectedProduct === 'website' ? `Website (${currentModelName})` : selectedProduct;
+
+    if(currentUser.credits < price) {
+        return showToast('Onvoldoende Credits', `Je hebt ${price} credit(s) nodig.`, 'error');
+    }
+
+    // Credits eraf
+    const users = getUsers();
+    const u = users.find(x => x.email === currentUser.email);
+    u.credits -= price;
+    saveUsers(users);
+    syncUserCredits();
+
+    // Opslaan in database / localStorage
+    const orders = JSON.parse(localStorage.getItem('ncs_orders')) || [];
+    orders.push({
+        id: 'ORD-' + Date.now(),
+        userEmail: currentUser.email,
+        userName: currentUser.name,
+        product: prodTitle, // De Admin ziet nu direct bijv. "Website (Pro)"
+        price: price,
+        projectName: name,
+        description: desc,
+        status: 'In Behandeling',
+        date: new Date().toLocaleDateString('nl-NL')
+    });
+    localStorage.setItem('ncs_orders', JSON.stringify(orders));
+
+    closeOrderModal();
+    showToast('Besteld!', `${prodTitle} succesvol geplaatst.`, 'success');
+}
+        
     </script>
+    
 </body>
 </html>
