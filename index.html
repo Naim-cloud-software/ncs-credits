@@ -2218,7 +2218,98 @@ function updateTierSelection(name, price) {
     // Past het aantal credits aan dat bovenin getoond wordt
     document.getElementById('modalProductPrice').textContent = price;
 }
-        
+
+
+
+        // Houdt het geselecteerde model en prijs bij
+let selectedTierName = 'Normaal';
+let selectedTierPrice = 1;
+
+// Update de titel en prijs live in de modal zodra je op Normaal, Pro of Max klikt
+function updateTierSelection(name, price) {
+    selectedTierName = name;
+    selectedTierPrice = price;
+    
+    document.getElementById('modalProductName').textContent = `Website Maken (${name})`;
+    document.getElementById('modalProductPrice').textContent = price;
+}
+
+// Opent de modal en reset de selectie naar 1 Credit / Normaal
+function initiateOrder(productType, defaultPrice) {
+    selectedProduct = productType;
+    const websiteOpts = document.getElementById('websiteTierContainer');
+
+    if (productType === 'website') {
+        if (websiteOpts) websiteOpts.classList.remove('hidden');
+        // Reset radio naar Normaal
+        const defaultRadio = document.querySelector('input[name="websiteTier"][value="Normaal"]');
+        if (defaultRadio) defaultRadio.checked = true;
+        updateTierSelection('Normaal', 1);
+    } else {
+        if (websiteOpts) websiteOpts.classList.add('hidden');
+        document.getElementById('modalProductName').textContent = productType;
+        document.getElementById('modalProductPrice').textContent = defaultPrice;
+    }
+
+    document.getElementById('orderModal').classList.remove('hidden');
+}
+
+// Sluit de modal
+function closeOrderModal() {
+    document.getElementById('orderModal').classList.add('hidden');
+}
+
+// Bevestigt en verwerkt de bestelling
+function confirmOrder() {
+    const nameInput = document.getElementById('orderProjectName');
+    const descInput = document.getElementById('orderDescription');
+
+    const name = nameInput ? nameInput.value.trim() : '';
+    const desc = descInput ? descInput.value.trim() : '';
+
+    if (!name || !desc) {
+        return showToast('Fout', 'Vul alle velden in', 'error');
+    }
+
+    // Bepaal de definitieve prijs en productnaam
+    const finalPrice = selectedProduct === 'website' ? selectedTierPrice : 1;
+    const finalProductName = selectedProduct === 'website' ? `Website (${selectedTierName})` : selectedProduct;
+
+    // Check of gebruiker genoeg credits heeft
+    if (currentUser.credits < finalPrice) {
+        return showToast('Onvoldoende Credits', `Je hebt ${finalPrice} credit(s) nodig.`, 'error');
+    }
+
+    // Credits afschrijven
+    const users = getUsers();
+    const u = users.find(x => x.email === currentUser.email);
+    if (u) {
+        u.credits -= finalPrice;
+        saveUsers(users);
+        syncUserCredits();
+    }
+
+    // Bestelling opslaan in localStorage voor het admin panel
+    const orders = JSON.parse(localStorage.getItem('ncs_orders')) || [];
+    orders.push({
+        id: 'ORD-' + Date.now(),
+        userEmail: currentUser.email,
+        userName: currentUser.name,
+        product: finalProductName,
+        price: finalPrice,
+        projectName: name,
+        description: desc,
+        status: 'In Behandeling',
+        date: new Date().toLocaleDateString('nl-NL')
+    });
+    localStorage.setItem('ncs_orders', JSON.stringify(orders));
+
+    // Reset velden en sluit
+    nameInput.value = '';
+    descInput.value = '';
+    closeOrderModal();
+    showToast('Besteld!', `${finalProductName} is succesvol aangevraagd.`, 'success');
+}
     </script>
     
 </body>
