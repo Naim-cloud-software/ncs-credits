@@ -1444,7 +1444,7 @@
 
         // --- Credits Logic ---
         window.buyCredits = async (amount, cost) => {
-            if(!confirm(`Wil je ${amount} credits kopen voor €${cost}? Je moet dit contant betalen bij de admin.`)) return;
+            if(!confirm(`Wil je ${amount} credits kopen voor €${cost}? Je moet dit contant betalen bij de admin, bij een aangewezen locatie`)) return;
             
             try {
                 await addDoc(ORDERS_COLLECTION, {
